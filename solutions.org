@@ -20,7 +20,7 @@ If the input is 2, the program should print even and then print 2, 4, 6, 8, 10, 
 Your program should use the is_integer() method to display an error message if the input is a number with significant digits beyond the decimal point.
 
 #+begin_src python :tangle 1_1.py
-  def even_odd(num: Int):
+  def even_odd(num):
       if num % 2 == 0:
           print("even")
       else:
