@@ -5,6 +5,15 @@
 #+startup: showeverything
 #+options: toc:3
 
+* Requirements
+
+These are the packages that are required to be installed before running the source code
+
+#+begin_src txt :tangle requirements.txt
+matplotlib
+pyowm
+#+end_src
+
 * Chapter 1
 
 ** Challenge 1 - Even-Odd Vending Machine
@@ -381,4 +390,315 @@ Try rewriting some of the other programs in this chapter so that they continue e
           answer = input('Do you want to exit? (y) for yes ')
           if answer == 'y':
               break
+#+end_src
+
+* Chapter 2
+
+** Challenge 1 - How Does the Temperature Vary During the Day?
+
+If you enter a search term like “New York weather” in Google’s search engine, you’ll see, among other things, a graph showing the temperature at different times of the present day. Your task here is to re-create such a graph.
+Using a city of your choice, find the temperature at different points of the day. Use the data to create two lists in your program and to create a graph with the time of day on the x-axis and the corresponding temperature on the y-axis. The graph should tell you how the temperature varies with the time of day. Try a different city and see how the two cities compare by plotting both lines on the same graph.
+The time of day may be indicated by strings such as '10:11 AM' or '09:21 PM'.
+
+#+begin_src python :tangle 2_1.py
+  import matplotlib.pyplot as plt
+
+  def plot_forecast():
+
+      time_of_day = ['4 AM', '7 AM', '10 AM', '1 PM', '4 PM', '7PM', '10 PM']
+      forecast_temp = [71, 70, 74, 80, 82, 81, 76]
+      time_interval = range(1, len(time_of_day) + 1)
+
+      plt.plot(time_interval, forecast_temp, 'o-')
+      plt.xticks(time_interval, time_of_day)
+      plt.show()
+
+  if __name__ == '__main__':
+      plot_forecast()
+#+end_src
+
+** Challenge 2 - Exploring a Quadratic Function Visually
+
+In Chapter 1, you learned how to find the roots of a quadratic equation, such as $x^2 + 2x + 1 = 0$. We can turn this equation into a function by writing it as $y = x^2 + 2x + 1$. For any value of $x$, the quadratic function produces some value for $y$. For example, when $x = 1$, $y = 4$. Here’s a program that calculates the value of $y$ for six different values of $x$:
+
+#+begin_src python
+  '''
+  Quadratic function calculator
+  '''
+
+  # Assume values of x
+  x_values = [-1, 1, 2, 3, 4, 5]
+  for x in x_values:
+      # Calculate the value of the quadratic function
+      y = x**2 + 2*x + 1
+      print('x={0} y={1}'.format(x, y))
+#+end_src
+
+At, we create a list with six different values for $x$. The for loop starting at calculates the value of the function above for each of these values and uses the label $y$ to refer to the result. Next, we print the value of $x$ and the corresponding value of $y$. When you run the program, you should see the following output:
+
+#+begin_example
+x=-1 y=0
+x=1 y=4
+x=2 y=9
+x=3 y=16
+x=4 y=25
+x=5 y=36
+#+end_example
+
+Notice that the first line of the output is a root of the quadratic equa- tion because it’s a value for x that makes the function equal to 0.
+Your programming challenge is to enhance this program to create
+a graph of the function. Try using at least 10 values for x instead of the 6 above. Calculate the corresponding y values using the function and then create a graph using these two sets of values.
+
+Once you’ve created the graph, spend some time analyzing how the value of $y$ varies with respect to $x$. Is the variation linear or nonlinear?
+
+#+begin_src python :tangle 2_2.py
+import matplotlib.pyplot as plt
+
+
+def quad_func_calc():
+    x_values = [-1, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    y_values = []
+    for x in x_values:
+        # Calculate the value of quadratic function
+        y_values.append(x**2 + x * 2 + 1)
+    draw_graph(x_values, y_values)
+
+
+def draw_graph(x, y):
+    plt.plot(x, y, marker='o')
+    plt.xlabel('x-axis')
+
+    plt.ylabel('y-axis')
+    plt.title('Quadratic Function')
+
+
+if __name__ == '__main__':
+    quad_func_calc()
+#+end_src
+
+** Challenge 3 - Enhanced Projectile Trajectory Comparison Program
+
+Your challenge here is to enhance the trajectory comparison program in a few ways. First, your program should print the time of flight, maximum horizontal distance, and maximum vertical distance traveled for each of the velocity and angle of projection combinations.
+The other enhancement is to make the program work with any number of initial velocity and angle of projection values, supplied by the user. For example, here’s how the program should ask the user for the inputs:
+
+#+begin_example
+How many trajectories? 3
+Enter the initial velocity for trajectory 1 (m/s): 45
+Enter the angle of projection for trajectory 1 (degrees): 45
+Enter the initial velocity for trajectory 2 (m/s): 60
+Enter the angle of projection for trajectory 2 (degrees): 45
+Enter the initial velocity for trajectory(m/s) 3: 45
+Enter the angle of projection for trajectory(degrees) 3: 90
+#+end_example
+
+Your program should also ensure that erroneous input is properly handled using a ~try...except~ block, just as in the original program.
+
+#+begin_src python :tangle 2_3.py
+
+  import matplotlib.pyplot as plt
+  import math
+
+  g = 9.8
+
+  def draw_graph(x, y):
+      plt.plot(x, y)
+      plt.xlabel('x-coordinate')
+      plt.ylabel('y-coordinate')
+      plt.title('Projectile motion at different initial velocities and angles')
+    
+  def frange(start, final, interval):
+
+      numbers = []
+      while start < final:
+          numbers.append(start)
+          start = start + interval
+    
+      return numbers
+
+  def draw_trajectory(u, theta, t_flight):
+      # list of x and y co-ordinates
+      x = []
+      y = []
+      intervals = frange(0, t_flight, 0.001)
+      for t in intervals:
+          x.append(u*math.cos(theta)*t)
+          y.append(u*math.sin(theta)*t - 0.5*g*t*t)
+
+      #create the graph
+      draw_graph(x, y)
+
+  if __name__ == '__main__':
+
+      num_trajectories = int(input('How many trajectories? '))
+    
+      velocities = []
+      angles = []
+      for i in range(1, num_trajectories+1):
+          v = input('Enter the initial velocity for trajectory {0} (m/s): '.format(i))
+          theta = input('Enter the angle of projection for trajectory {0} (degrees): '.format(i))
+          velocities.append(float(v))
+          angles.append(math.radians(float(theta)))
+
+      for i in range(num_trajectories):
+          # calculate time of flight, maximum horizontal distance and
+          # maximum vertical distance
+          t_flight = 2*velocities[i]*math.sin(angles[i])/g
+          S_x = velocities[i]*math.cos(angles[i])*t_flight
+          S_y = velocities[i]*math.sin(angles[i])*(t_flight/2) - (1/2)*g*(t_flight/2)**2
+          print('Initial velocity: {0} Angle of Projection: {1}'.format(velocities[i], math.degrees(angles[i])))
+          print('T: {0} S_x: {1} S_y: {2}'.format(t_flight, S_x, S_y))
+          print()
+          draw_trajectory(velocities[i], angles[i], t_flight)
+        
+      # Add a legend and show the graph
+      legends = []
+      for i in range(0, num_trajectories):
+          legends.append('{0} - {1}'.format(velocities[i], math.degrees(angles[i])))
+      plt.legend(legends)
+      plt.show()
+#+end_src
+
+** Challenge 4 - Visualizing Your Expenses
+
+I always find myself asking at the end of the month, “Where did all that money go?” I’m sure this isn’t a problem I alone face.
+For this challenge, you’ll write a program that creates a bar chart for easy comparison of weekly expenditures. The program should first ask for the number of categories for the expenditures and the weekly total expen- diture in each category, and then it should create the bar chart showing these expenditures.
+Here’s a sample run of how the program should work:
+
+#+begin_example
+Enter the number of categories: 4
+Enter category: Food
+Expenditure: 70
+Enter category: Transportation Expenditure: 35
+Enter category: Entertainment Expenditure: 30
+Enter category: Phone/Internet Expenditure: 30
+#+end_example
+
+We haven’t discussed creating a bar chart using matplotlib, so let’s try an example.
+A bar chart can be created using matplotlib’s barh() function, which
+is also defined in the pyplot module. Figure 2-17 shows a bar chart that illustrates the number of steps I walked during the past week. The days of the week—Sunday, Monday, Tuesday, and so forth—are referred to as the labels. Each horizontal bar starts from the y-axis, and we have to specify the y-coordinate of the center of this position for each of the bars. The length of each bar corresponds to the number of steps specified.
+The following program creates the bar chart:
+
+#+begin_src python
+  import matplotlib.pyplot as plt
+
+  def create_bar_chart(data, labels):
+      # Number of bars
+      num_bars = len(data)
+      # This list is the point on the y-axis where each
+      # Bar is centered. Here it will be [1, 2, 3...]
+      positions = range(1, num_bars+1)
+      plt.barh(positions, data, align='center')
+      # Set the label of each bar
+      plt.yticks(positions, labels)
+      plt.xlabel('Steps')
+      plt.ylabel('Day')
+      plt.title('Number of steps walked')
+      # Turns on the grid which may assist in visual estimation
+      plt.grid()
+      plt.show()
+
+  if __name__ == '__main__':
+      # Number of steps I walked during the past week
+      steps = [6534, 7000, 8900, 10786, 3467, 11045, 5095]
+      # Corresponding days
+      labels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+      create_bar_chart(steps, labels)
+#+end_src
+
+The ~create_bar_chart()~ function accepts two parameters—data, which is a list of numbers we want to represent using the bars and labels, and the corresponding labels list. The center of each bar has to be specified, and I’ve arbitrarily chosen the centers as 1, 2, 3, 4, and so on using the help of the ~range()~ function at.
+We then call the ~barh()~ function, passing positions and data as the first two arguments and then the keyword argument, align='center', at. The keyword argument specifies that the bars are centered at the positions on the y-axis specified by the list. We then set the labels for each bar, the axis labels, and the title using the ~yticks()~ function. We also call the ~grid()~ function to turn on the grid, which may be useful for a visual estimation of the number of steps. Finally, we call the ~show()~ function.
+
+#+begin_src python :tangle 2_4.py
+  import matplotlib.pyplot as plt
+
+  def create_bar_chart(data, labels):
+      # number of bars
+      num_bars = len(data)
+      # this list is the point on the y-axis where each
+      # bar is centered. Here it will be [1, 2, 3..]
+      positions = range(1, num_bars+1)
+      plt.barh(positions, data, align='center')
+      # set the label of each bar
+      plt.yticks(positions, labels)
+      plt.xlabel('Amount')
+      plt.ylabel('Categories')
+      plt.title('Weekly expenditures')
+      # Turns on the grid which may assist in visual estimation
+      plt.grid()
+      plt.show()
+
+  if __name__ == '__main__':
+      n = int(input('Enter the number of categories: '))
+      labels = []
+      expenditures = []
+      for i in range(n):
+          category = input('Enter category: ')
+          expenditure = float(input('Expenditure: '))
+          labels.append(category)
+          expenditures.append(expenditure)
+      create_bar_chart(expenditures, labels)
+
+#+end_src
+
+** Challenge 5 - Exploring the Relationship Between the Fibonacci Sequence and the Golden Ratio
+
+The Fibonacci sequence (1, 1, 2, 3, 5, . . .) is the series of numbers where the ith number in the series is the sum of the two previous numbers—that is, the numbers in the positions (i − 2) and (i − 1). The successive numbers in this series display an interesting relationship. As you increase the number of terms in the series, the ratios of consecutive pairs of numbers are nearly equal to each other. This value approaches a special number referred to as the golden ratio. Numerically, the golden ratio is the number 1.618033988 . . . , and it’s been the subject of extensive study in music, architecture, and nature. For this challenge, write a program that will plot on a graph the ratio between consecutive Fibonacci numbers for, say, 100 numbers, which will demonstrate that the values approach the golden ratio.
+You may find the following function, which returns a list of the first n Fibonacci numbers, useful in implementing your solution:
+
+#+begin_src python
+  def fibo(n):
+      if n == 1:
+          return [1]
+      if n == 2:
+          return [1, 1] 
+      #n> 2
+      a= 1
+      b= 1
+      # First two members of the series 
+      series = [a, b]
+      for i in range(n):
+          c=a+ b 
+          series.append(c) 
+          a= b
+          b= c
+      return series
+#+end_src
+ 
+#+begin_src python :tangle 2_5.py
+  import matplotlib.pyplot as plt
+
+  def fibo(n):
+      if n == 1:
+          return [1]
+      if n == 2:
+          return [1, 1]
+      # n > 2
+      a = 1
+      b = 1
+      # first two members of the series
+      series = [a, b]
+      for i in range(n):
+          c = a + b
+          series.append(c)
+          a = b
+          b = c
+
+      return series
+
+  def plot_ratio(series):
+      ratios = []
+      for i in range(len(series)-1):
+          ratios.append(series[i+1]/series[i])
+      plt.plot(ratios)
+      plt.title('Ratio between Fibonacci numbers & Golden ratio')
+      plt.ylabel('Ratio')
+      plt.xlabel('No.')
+      plt.show()
+
+  if __name__ == '__main__':
+      # Number of fibonacci numbers
+      num = 100
+      series = fibo(num)
+      plot_ratio(series)
+
 #+end_src
