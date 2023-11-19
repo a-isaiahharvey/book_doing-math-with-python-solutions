@@ -1,0 +1,382 @@
+#+title: Chapter 1
+#+subtitle: Working with Numbers
+#+author: Allister Isaiah Harvey
+#+property: header-args:python :python python3
+#+startup: showeverything
+#+options: toc:3
+
+* Challenge 1 - Even-Odd Vending Machine
+
+Try writing an “even-odd vending machine,” which will take a number as input and do two things:
+
+1. Print whether the number is even or odd.
+
+2. Display the number followed by the next 9 even or odd numbers.
+
+If the input is 2, the program should print even and then print 2, 4, 6, 8, 10, 12, 14, 16, 18, 20. Similarly, if the input is 1, the program should print odd and then print 1, 3, 5, 7, 9, 11, 13, 15, 17, 19. 
+
+Your program should use the is_integer() method to display an error message if the input is a number with significant digits beyond the decimal point.
+
+#+begin_src python :tangle 1_1.py
+  def even_odd(num):
+      if num % 2 == 0:
+          print("even")
+      else:
+          print("odd")
+      for i in range(0, 20, 2):
+          print(num + i)
+
+  if __name__ == '__main__':
+      even_odd(2)
+#+end_src
+
+* Challenge 2 - Enhanced Multiplication Table Generator
+
+Our multiplication table generator is cool, but it prints only the first 10 multiples. Enhance the generator so that the user can specify both the number and up to which multiple. For example, I should be able to input that I want to see a table listing the first 15 multiples of 9.
+
+#+begin_src python :tangle 1_2.py
+def enhanced_multi_table(a, end_mult):
+    for i in range(1, int(end_mult) + 1):
+        print('{0} x {1} = {2}'.format(a, i, a * i))
+
+
+if __name__ == '__main__':
+    a = input('Enter a number: ')
+    b = input('Enter the last multiple: ')
+    enhanced_multi_table(float(a), b)
+#+end_src
+
+* Challenge 3 - Enhanced Unit Converter
+
+The unit conversion program we wrote in this chapter is limited to conversions between kilometers and miles. Try extending the program to convert between units of mass (such as kilograms and pounds) and between units of temperature (such as Celsius and Fahrenheit).
+
+#+begin_src python :tangle 1_3.py
+  def print_menu():
+      print('1. Kilometers to Miles')
+      print('2. Miles to Kilometers')
+      print('3. Celsius to Fahrenheit')
+      print('4. Fahrenheit to Celsius')
+      print('5. Kilograms to Pounds')
+      print('6. Pounds to Kilograms')
+
+
+  def km_mi():
+      km = float(input('Enter distance in kilometers: '))
+      mi = km / 1.609
+
+      print('Distance in miles: {0}'.format(mi))
+
+
+  def mi_km():
+      mi = float(input('Enter distance in miles: '))
+      km = mi * 1.609
+
+      print('Distance in kilometers: {0}'.format(km))
+
+
+  def c_f():
+      c = float(input('Enter temperature in Celsius: '))
+      f = c * (9 / 5) + 32
+
+      print('Temperature in Fahrenheit: {0}'.format(f))
+
+
+  def f_c():
+      f = float(input('Enter temperature in Fahrenheit: '))
+      c = (f - 32) * (5 / 9)
+
+      print('Temperature in Celsius: {0}'.format(c))
+
+
+  def kg_lbs():
+      kg = float(input('Enter mass in kilograms: '))
+      lbs = kg * 2.2046
+
+      print('Mass in pounds: {0}'.format(lbs))
+
+
+  def lbs_kg():
+      lbs = float(input('Enter mass in pounds: '))
+      kg = lbs / 2.2046
+
+      print('Mass in kilograms: {0}'.format(kg))
+
+
+  if __name__ == '__main__':
+      print_menu()
+
+      choice = input('Which conversion would you like to do?: ')
+      if choice == '1':
+          km_mi()
+      elif choice == '2':
+          mi_km()
+      elif choice == '3':
+          c_f()
+      elif choice == '4':
+          f_c()
+      elif choice == '5':
+          kg_lbs()
+      elif choice == '6':
+          lbs_kg()
+#+end_src
+
+* Challenge 4 - Fraction Calculator
+
+Write a calculator that can perform the basic mathematical operations on two fractions. It should ask the user for two fractions and the operations the user user wants to carry out. As a head start, here's how you can write the program with only the addition operation:
+
+#+begin_src python :tangle 1_4.py
+  from fractions import Fraction
+
+
+  def add(a, b):
+      print('{0} + {1} = {2}'.format(a, b, a + b))
+
+
+  def subtract(a, b):
+      print('{0} - {1} = {2}'.format(a, b, a - b))
+
+
+  def multiply(a, b):
+      print('{0} * {1} = {2}'.format(a, b, a * b))
+
+
+  def divide(a, b):
+      print('{0} / {1} = {2}'.format(a, b, a / b))
+
+
+  if __name__ == '__main__':
+
+      a = Fraction(input('Enter first fraction: '))
+
+      b = Fraction(input('Enter second fraction: '))
+      op = str.lower(
+          input('Operation to perform - Add, Subtract, Mulitply, Divide: '))
+      if op == 'add':
+          add(a, b)
+      elif op == 'subtract':
+          subtract(a, b)
+      elif op == 'multiply':
+          multiply(a, b)
+      elif op == 'divide':
+          divide(a, b)
+      else:
+          print('Input a valid operation')
+#+end_src
+
+* Challenge 5 - Give Exit Power to the User
+
+All the programs we have written so far work only for one iteration of input and output. For example, consider the program to print the multiplication table: the user executes the program and enters a number; then the program prints the multiplication table and exits. If the user wanted to print the multiplication table of another number, the program would have to be rerun.
+It would be more convenient if the user could choose whether to exit or continue using the program. The key to writing such programs is to set up an infinite  loop, or a loop that doesn't exit unless explicitly asked to do so. Below, you can see an example of the layout for such a program:
+
+#+begin_src python
+  '''
+  Run until exit layout
+  '''
+  def fun():
+      print('I am in an endless loop')
+
+  if __name__ == '__main__':
+      while True:
+          fun()
+          answer = input('Do you want to exit? (y) for yes ')
+          if answer == 'y':
+              break
+#+end_src
+
+We define an infinite loop using while True atu. A while loop continues to execute unless the condition evaluates to False. Because we chose the loop's condition to be the constant value True, it will keep running forever unless we interrupt it somehow. Inside the loop, we call the function fun(), which prints the string I am in an endless loop. Atv, the user is asked “Do you want to exit?” If the user enters y as the input, the program exits out of the loop using the break statement (break exits out of the innermost loop without executing any other statement in that loop). If the user enters any other input (or none at all, just pressing ENTER), the while loop continues execution—that is, it prints the string again and continues doing so until the user wishes to exit. Here is a sample run of the program:
+
+#+begin_example
+I am in an endless loop
+Do you want to exit? (y) for yes n 
+I am in an endless loop
+Do you want to exit? (y) for yes n 
+I am in an endless loop
+Do you want to exit? (y) for yes n 
+I am in an endless loop
+Do you want to exit? (y) for yes y
+#+end_example
+
+Based on this example, let's rewrite the multiplication table generator so that it keeps going until the user wants to exit. The new version of the program is shown below:
+
+#+begin_src python
+  '''
+  Multiplication table printer with
+  exit power to the user
+  '''
+
+  def multi_table(a):
+
+      for i in range(1, 11):
+          print('{0} x {1} = {2}'.format(a, i, a*i))
+
+  if __name__ == '__main__':
+
+      while True:
+          a = input('Enter a number: ')
+          multi_table(float(a))
+
+          answer = input('Do you want to exit? (y) for yes ')
+          if answer == 'y':
+              break
+#+end_src
+
+If you compare this program to the one we wrote earlier, you'll see that the only change is the addition of the while loop, which includes the prompt asking the user to input a number and the call to the multi_table() function.
+
+When you run the program, the program will ask for a number and print its multiplication table, as before. However, it will also subsequently ask whether the user wants to exit the program. If the user doesn't want to exit, the program will be ready to print the table for another number. Here is a sample run:
+
+#+begin_example
+Enter a number: 2
+2.000000 x 1.000000 = 2.000000 
+2.000000 x 2.000000 = 4.000000 
+2.000000 x 3.000000 = 6.000000 
+2.000000 x 4.000000 = 8.000000
+2.000000 x 5.000000 = 10.000000 
+2.000000 x 6.000000 = 12.000000 
+2.000000 x 7.000000 = 14.000000 
+2.000000 x 8.000000 = 16.000000 
+2.000000 x 9.000000 = 18.000000 
+2.000000 x 10.000000 = 20.000000
+
+Do you want to exit? (y) for yes n
+Enter a number:
+#+end_example
+
+Try rewriting some of the other programs in this chapter so that they continue executing until asked by the user to exit.
+
+#+begin_src python :tangle 1_5_1.py
+  def even_odd(num):
+        if num % 2 == 0:
+            print("even")
+        else:
+            print("odd")
+        for i in range(0, 20, 2):
+            print(num + i)
+
+  if __name__ == '__main__':
+
+      while True:
+          even_odd(2)
+          answer = input('Do you want to exit? (y) for yes ')
+          if answer == 'y':
+              break
+#+end_src
+
+#+begin_src python :tangle 1_5_2.py
+  def print_menu():
+      print('1. Kilometers to Miles')
+      print('2. Miles to Kilometers')
+      print('3. Celsius to Fahrenheit')
+      print('4. Fahrenheit to Celsius')
+      print('5. Kilograms to Pounds')
+      print('6. Pounds to Kilograms')
+
+
+  def km_mi():
+      km = float(input('Enter distance in kilometers: '))
+      mi = km / 1.609
+
+      print('Distance in miles: {0}'.format(mi))
+
+
+  def mi_km():
+      mi = float(input('Enter distance in miles: '))
+      km = mi * 1.609
+
+      print('Distance in kilometers: {0}'.format(km))
+
+
+  def c_f():
+      c = float(input('Enter temperature in Celsius: '))
+      f = c * (9 / 5) + 32
+
+      print('Temperature in Fahrenheit: {0}'.format(f))
+
+
+  def f_c():
+      f = float(input('Enter temperature in Fahrenheit: '))
+      c = (f - 32) * (5 / 9)
+
+      print('Temperature in Celsius: {0}'.format(c))
+
+
+  def kg_lbs():
+      kg = float(input('Enter mass in kilograms: '))
+      lbs = kg * 2.2046
+
+      print('Mass in pounds: {0}'.format(lbs))
+
+
+  def lbs_kg():
+      lbs = float(input('Enter mass in pounds: '))
+      kg = lbs / 2.2046
+
+      print('Mass in kilograms: {0}'.format(kg))
+
+
+  if __name__ == '__main__':
+    
+      while True:
+          print_menu()
+
+          choice = input('Which conversion would you like to do?: ')
+          if choice == '1':
+              km_mi()
+          elif choice == '2':
+              mi_km()
+          elif choice == '3':
+              c_f()
+          elif choice == '4':
+              f_c()
+          elif choice == '5':
+              kg_lbs()
+          elif choice == '6':
+              lbs_kg()
+
+          answer = input('Do you want to exit? (y) for yes ')
+          if answer == 'y':
+              break
+#+end_src
+
+#+begin_src python :tangle 1_5_3.py
+  from fractions import Fraction
+
+
+  def add(a, b):
+      print('{0} + {1} = {2}'.format(a, b, a + b))
+
+
+  def subtract(a, b):
+      print('{0} - {1} = {2}'.format(a, b, a - b))
+
+
+  def multiply(a, b):
+      print('{0} * {1} = {2}'.format(a, b, a * b))
+
+
+  def divide(a, b):
+      print('{0} / {1} = {2}'.format(a, b, a / b))
+
+
+  if __name__ == '__main__':
+
+      while True:
+          a = Fraction(input('Enter first fraction: '))
+
+          b = Fraction(input('Enter second fraction: '))
+          op = str.lower(
+              input('Operation to perform - Add, Subtract, Mulitply, Divide: '))
+          if op == 'add':
+              add(a, b)
+          elif op == 'subtract':
+              subtract(a, b)
+          elif op == 'multiply':
+              multiply(a, b)
+          elif op == 'divide':
+              divide(a, b)
+          else:
+              print('Input a valid operation')
+
+          answer = input('Do you want to exit? (y) for yes ')
+          if answer == 'y':
+              break
+#+end_src

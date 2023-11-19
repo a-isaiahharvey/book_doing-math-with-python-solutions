@@ -1,0 +1,22 @@
+#+title: Doing Math with Python Solutions
+#+author: Allister Isaiah Harvey
+#+date: 17-11-2023
+#+startup: showeverything
+#+options: toc:3
+
+* Requirements
+
+These are the packages that are required to be installed before running the source code
+
+#+begin_src text :tangle requirements.txt
+matplotlib
+pyowm
+#+end_src
+
+* [[file:src/chapter 1/solutions.org][Chapter 1]]
+
+#+INCLUDE: "src/chapter 1/solutions.org" :lines "7-"
+
+* [[file:src/chapter 2/solutions.org][Chapter 2]]
+
+#+INCLUDE: "src/chapter 2/solutions.org" :lines "7-"
