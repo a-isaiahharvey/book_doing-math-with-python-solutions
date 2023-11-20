@@ -1,0 +1,356 @@
+#+title: Chapter 6
+#+subtitle: Drawing Geometric Shapes and Fractals
+#+author: Allister Isaiah Harvey
+#+property: header-args:python :python python3
+#+startup: showeverything
+#+options: toc:3
+
+* Challenge 1 - Packing Circles into a Square
+
+I mentioned earlier that ~matplotlib~ supports the creation of other geometric shapes. The ~Polygon~ patch is especially interesting, as it allows you to draw polygons with different numbers of sides. Here’s how we can draw a square (each side of length 4):
+
+#+begin_src python
+  '''
+  Draw a square
+  '''
+
+  from matplotlib import pyplot as plt
+
+  def draw_square():
+      ax = plt.axes(xlim = (0, 6), ylim = (0, 6))
+      square = plt.Polygon([(1, 1), (5, 1), (5, 5), (1, 5)], closed = True)
+      ax.add_patch(square)
+      plt.show()
+
+  if __name__ == '__main__':
+      draw_square()
+#+end_src
+
+The ~Polygon~ object is created by passing the list of the vertices’ coordi- nates as the first argument. Because we’re drawing a square, we pass the coordinates of the four vertices: (1, 1), (5, 1), (5, 5), and (1, 5). Passing closed=True tells matplotlib that we want to draw a closed polygon, where the starting and the ending vertices are the same.
+In this challenge, you’ll attempt a very simplified version of the “circles packed into a square” problem. How many circles of radius 0.5 will fit in the square produced by this code? Draw and find out! Figure 6-11 shows how the final image will look.
+The trick here is to start from the lower-left corner of the square— that is, (1, 1)—and then continue adding circles until the entire square is filled. The following snippet shows how you can create the circles and add them to the figure:
+
+#+begin_src python
+  y = 1.5
+  while y < 5:
+      x = 1.5
+      while x < 5:
+          c = draw_circle(x, y)
+          ax.add_patch(c)
+          x += 1.0
+      y += 1.0
+#+end_src
+
+A point worth noting here is that this is not the most optimal or, for that matter, the only way to pack circles into a square, and finding different ways of solving this problem is popular among mathematics enthusiasts.
+
+#+begin_src python :tangle 6_1.py
+  from matplotlib import pyplot as plt
+
+  def draw_square():
+      square = plt.Polygon([(1, 1), (5, 1), (5, 5), (1, 5)], closed=True)
+      return square
+
+  def draw_circle(x, y):
+      circle = plt.Circle((x, y), radius=0.5, fc='y')
+      return circle
+
+  if __name__ == '__main__':
+
+      ax = plt.gca()
+      s = draw_square()
+      ax.add_patch(s)
+      y = 1.5
+      while y < 5:
+          x = 1.5
+          while x < 5:
+              c = draw_circle(x, y)
+              ax.add_patch(c)
+
+              x += 1.0
+          y += 1.0
+
+      plt.axis('scaled') 
+      plt.show()
+#+end_src
+
+* Challenge 2 - Drawing the Sierpiński Triangle
+
+The Sierpiński triangle, named after the Polish mathematician Wacław Sierpiński, is a fractal that is an equilateral triangle composed of smaller equilateral triangles embedded inside it. Figure 6-12 shows a Sierpiński triangle composed of 10,000 points.
+
+The interesting thing here is that the same process that we used to draw a fern will also draw the Sierpiński triangle—only the transformation rules and their probability will change. Here’s how you can draw the Sierpiński triangle: start with the point (0, 0) and apply one of the follow- ing transformations:
+
+*Transformation 1:*
+
+$x_n+1 = 0.5x_n$
+
+$y_n+1 = 0.5y_n$
+
+
+*Transformation 2:*
+
+$x_n+1 = 0.5x_n + 0.5$
+
+$y_n+1 = 0.5y_n + 0.5$
+
+*Transformation 3:*
+
+$x_n+1 = 0.5x_n + 1$
+
+$y_n+1 = 0.5y_n$
+
+Each of the transformations has an equal probability of being selected—1/3. Your challenge here is to write a program that draws the Sierpiński triangle composed of a certain number of points specified as input.
+
+#+begin_src python :tangle 6_2.py
+  import random
+  import matplotlib.pyplot as plt
+
+  def transformation_1(p):
+      x = p[0]
+      y = p[1]
+      x1 = 0.5*x
+      y1 = 0.5*y
+      return x1, y1
+
+  def transformation_2(p):
+      x = p[0]
+      y = p[1]
+      x1 = 0.5*x + 0.5
+      y1 = 0.5*y + 0.5
+      return x1, y1
+
+  def transformation_3(p):
+      x = p[0]
+      y = p[1]
+      x1 = 0.5*x + 1
+      y1 = 0.5*y
+      return x1, y1
+
+  def get_index(probability):
+      r = random.random()
+      c_probability = 0
+      sum_probability = []
+      for p in probability:
+          c_probability += p
+          sum_probability.append(c_probability)
+      for item, sp in enumerate(sum_probability):
+          if r <= sp:
+              return item
+      return len(probability)-1
+
+  def transform(p):
+      # list of transformation functions
+      transformations = [transformation_1, transformation_2, transformation_3]
+      probability = [1/3, 1/3, 1/3]
+      # pick a random transformation function and call it
+      tindex = get_index(probability)
+      t = transformations[tindex]
+      x, y = t(p)
+      return x, y
+
+  def draw_sierpinski(n):
+      # We start with (0, 0)
+      x = [0]
+      y = [0]
+
+      x1, y1 = 0, 0
+      for i in range(n):
+         x1, y1 = transform((x1, y1))
+         x.append(x1)
+         y.append(y1)
+      return x, y
+
+  if __name__ == '__main__':
+      n = int(input('Enter the desired number of points in the Sierpinski Triangle: '))
+      x, y = draw_sierpinski(n)
+      # Plot the points
+      plt.plot(x, y, 'o')
+      plt.title('Sierpinski with {0} points'.format(n))
+      plt.show()
+#+end_src
+
+* Challenge 3 - Exploring Hénon’s Function
+
+In 1976, Michel Hénon introduced the Hénon function, which describes a transformation rule for a point $P(x, y)$ as follows: $P(x,y) → Q(y + 1 - 1.4x^2, 0.3x)$
+Irrespective of the initial point (provided it’s not very far from the origin), you’ll see that as you create more points, they start lying along curved lines, as shown in Figure 6-13.
+Your challenge here is to write a program to create a graph showing 20,000 iterations of this transformation, starting with the point (1, 1).
+Extra credit for writing another program to create an animated figure showing the points starting to lie along the curves! See https://www.youtube.com/watch?v=76ll818RlpQ for an example.
+This is an example of a dynamical system, and the curved lines that all the points seem attracted to are referred to as /attractors/. To learn more about this function, dynamical systems, and fractals in general, you may want to refer to Fractals: /A Very Short Introduction by Kenneth Falconer (Oxford University Press, 2013)/.
+
+#+begin_src python :tangle 6_3.py
+  import matplotlib.pyplot as plt
+  from matplotlib import animation
+
+  def transform(p):
+      x,y  = p
+      x1 = y + 1.0 - 1.4*x**2
+      y1 = 0.3*x
+
+      return x1, y1
+
+  def update_points(i, x, y, plot):
+      plot.set_data(x[:i], y[:i])
+      return plot,
+    
+  if __name__ == '__main__':
+      p = (0, 0)
+      x = [p[0]]
+      y = [p[1]]
+      for i in range(10000):
+          p = transform(p)
+          x.append(p[0])
+          y.append(p[1])
+
+      fig = plt.gcf()
+      ax = plt.axes(xlim = (min(x), max(x)),
+                    ylim = (min(y), max(y)))
+      plot = plt.plot([], [], 'o')[0]
+      anim = animation.FuncAnimation(fig, update_points,
+                                     fargs=(x, y, plot),
+                                     frames = len(x),
+                                     interval = 25)
+      plt.title('Henon Function Animation')
+      plt.show()
+
+#+end_src
+
+* Challenge 4 - Drawing the Mandelbrot Set
+
+Your challenge here is to write a program to draw the /Mandelbrot set/ — another example of the application of simple rules leading to a complicated-looking shape (see Figure 6-14). Before I lay down the steps to do that, however, we’ll first learn about matplotlib’s ~imshow()~ function.
+
+** The imshow() Function
+
+The ~imshow()~ function is usually used to display an external image, such as a JPEG or PNG image. You can see an example at http://matplotlib.org/users/image_tutorial.html. Here, however, we’ll use the function to draw a new image of our own creation via matplotlib.
+Consider the part of the Cartesian plane where $x$ and $y$ both range from 0 to 5. Now, consider six equidistant points along each axis: (0, 1,
+2, 3, 4, 5) along the x-axis and the same set of points along the y-axis. If we take the Cartesian product of these points, we get 36 equally spaced points in the x-y plane with the coordinates (0, 0), (0, 1) . . . (0, 5), (1, 0), (1, 1) . . . (1, 5) . . . (5, 5). Let’s now say that we want to color each of these points with a shade of gray—that is, some of these points will be black, some will be white, and others will be colored with a shade in between, randomly chosen. Figure 6-15 illustrates the scenario.
+To create this figure, we have to make a list of six lists. Each of these six lists will in turn consist of six integers ranging from 0 to 10. Each number will correspond to the color for each point, 0 standing for black and 10 standing for white. We’ll then pass this list to the ~imshow()~ function along with other necessary arguments.
+
+** Creating a List of Lists
+
+A list can also contain lists as its members:
+
+#+begin_example
+>>> l1 = [1, 2, 3]
+>>> l2 = [4, 5, 6]
+>>> l = [l1, l2]
+#+end_example
+
+Here, we created a list, $l$, consisting of two lists, $l1$ and $l2$. The first element of the list, $l[0]$, is thus the same as the $l1$ list and the second element of the list, $l[1]$, is the same as the $l2$ list:
+
+#+begin_example
+>>> l[0]
+[1, 2, 3]
+>>> l[1]
+[4, 5, 6]
+#+end_example
+
+To refer to an individual element within one of the member lists, we have to specify two indices— $l[0][1]$ refers to the second element of the first list, $l[1][2]$ refers to the third element of the second list, and so on.
+Now that we know how to work with a list of lists, we can write the program to create a figure similar to Figure 6-15:
+
+#+begin_src python
+  import matplotlib.pyplot as plt
+  import matplotlib.cm as cm
+  import random
+
+  def initialize_image(x_p, y_p): 
+      image = []
+      for i in range(y_p):
+         x_colors = []
+          for j in range(x_p):
+              x_colors.append(0)
+          image.append(x_colors)
+      return image
+
+  def color_points():
+      x_p = 6
+      y_p = 6
+      image = initialize_image(x_p, y_p)
+      for i in range(y_p):
+          for j in range(x_o):
+              image[i][j] = random.randint(0, 10)
+      plt.imshow(image, origin='lower', extent=(0, 5, 0, 5),
+                 cmap=cm.Greys_r, interpolation='nearest')
+      plt.colorbar()
+      plt.show()
+
+  if __name__ == '__main__':
+      color_points()
+#+end_src
+
+The ~initialize_image()~ function at (1) creates a list of lists with each of the elements initialized to 0. It accepts two arguments, ~x_p~ and ~y_p~, which correspond to the number of points along the $x-axis$ and $y-axis$, respectively. This effectively means that the initialized list image will consist of ~x_p~ lists with each list containing ~y_p~ zeros.
+
+In the ~color_points()~ function, once you have the image list back from ~initialize_image()~, assign a random integer between 0 and 10 to the element ~image[i][j]~ at (2). When we assign this random integer to the element, we are assigning a color to the point in the Cartesian plane that’s i steps along the $y-axis$ and /j/ steps along the $x-axis$ from the origin. It’s important to note that the ~imshow()~ function automatically deduces the color of a point from its position in the image list and doesn’t care about its specific /x/- and /y/-coordinates.
+
+Then, call the ~imshow()~ function at (3), passing image as the first argument. The keyword argument ~origin='lower'~ specifies that the number in ~image[0][0]~ corresponds to the color of the point (0, 0). The keyword argument ~extent=(0, 5, 0, 5)~ sets the lower-left and upper-right corners of the image to (0, 0) and (5, 5), respectively. The keyword argument ~cmap=cm.Greys_r~ specifies that we’re going to create a grayscale image.
+
+The last keyword argument, ~interpolation='nearest'~, specifies that matplotlib should color a point for which the color wasn’t specified with the same color as the one nearest to it. What does this mean? Note that we consider and specify the color for only 36 points in the region (0, 5) and (5, 5). Because there is an infinite number of points in this region, we tell matplotlib to set the color of an unspecified point to that of its nearest point. This is the reason you see color “boxes” around each point in the figure.
+
+Call the ~colorbar()~ function to display a color bar in the figure showing which integer corresponds to which color. Finally, call ~show()~ to display the image. Note that due to the use of the ~random.randint()~ function, your image will be colored differently than the one in Figure 6-15.
+
+If you increase the number of points along each axis by setting ~x_p~ and ~y_p~ to, let’s say, 20 in ~color_points()~, you’ll see a figure similar to the one shown in Figure 6-16. Note that the color boxes grow smaller in size. If you increase the number of points even more, you’ll see the size of the boxes shrink further, giving the illusion that each point has a different color.
+
+** Drawing the Mandelbrot Set
+
+We’ll consider the area of the $x-y$ plane between (−2.5, −1.0) and (1.0, 1.0) and divide each axis into 400 equally spaced points. The Cartesian product of these points will give us 1,600 equally spaced points in this region. We’ll refer to these points as $(x_1, y_1), (x_1, y_2) . . . (x_400, y_400)$.
+Create a list, ~image~, by calling the ~initialize_image()~ function we saw earlier with both ~x_p~ and ~y_p~ set to 400. Then, follow these steps for each of the generated points $(x_i, y_k)$:
+
+1. First, create two complex numbers, $z_1 = 0 + 0j$ and $c = x_i + y_{k}j$. (Recall that we use /j/ for $\sqrt{-1}$)
+2. Create a label iteration and set it to 0—that is, ~iteration=0~.
+3. Create a complex number, $z_1 = z_{1}^2 + c$.
+4. Increment the value stored in ~iteration~ by 1—that is, ~iteration = iteration + 1~.
+5. If $abs(z1) < 2$ and $iteration < max_iteration$, then go back to step 3; otherwise, go to step 6. The larger the value of ~max_iteration~, the more detailed the image, but the longer it’ll take to create the image. Set ~max_iteration~ to 1,000 here.
+6. Set the color of the point $(x_p y_k) to the value in ~iteration~ - that is ~image[k][i] = iteration~
+
+Once you have the complete image list, call the ~imshow()~ function with
+the extent keyword argument changed to indicate the region bounded by (−2.5, −1.0) and (1.0, 1.0).
+
+This algorithm is usually referred to as the ~escape-time algorithm~. When the maximum number of iterations is reached before a point’s magnitude exceeds 2, that point belongs to the Mandelbrot set and is colored white. The points that exceed the magnitude within fewer iterations are said to “escape”; they don’t belong to the Mandelbrot set and are colored black. You can experiment by decreasing and increasing the number of points along each axis. Decreasing the number of points will lead to a grainy image, while increasing them will result in a more detailed image.
+
+#+begin_src python :tangle 6_4.py
+  import matplotlib.pyplot as plt
+  import matplotlib.cm as cm
+
+  # Subset of the complex plane we are considering
+  x0, x1 = -2.5, 1
+  y0, y1 = -1, 1
+
+  def initialize_image(x_p, y_p):
+      image = []
+      for i in range(y_p):
+          x_colors = []
+          for j in range(x_p):
+              x_colors.append(0)
+          image.append(x_colors)
+      return image
+
+  def mandelbrot_set():
+      # Number of divisions along each axis
+      n = 400
+      # Maximum iterations
+      max_iteration=1000
+    
+      image = initialize_image(n, n)
+    
+      # Generate a set of equally spaced points in the region
+      # above
+      dx = (x1-x0)/(n-1)
+      dy = (y1-y0)/(n-1)
+      x_coords = [x0 + i*dx for i in range(n)]
+      y_coords = [y0 + i*dy for i in range(n)]
+
+      for i, x in enumerate(x_coords):
+          for k, y in enumerate(y_coords):
+              z1 = complex(0, 0)
+              iteration = 0
+              c = complex(x, y)
+              while (abs(z1) < 2  and iteration < max_iteration):
+                  z1 = z1**2 + c
+                  iteration += 1
+              image[k][i] = iteration
+      return image
+
+  if __name__ == '__main__':
+      image = mandelbrot_set()
+      plt.imshow(image, origin='lower', extent=(x0, x1, y0,y1),
+                 cmap=cm.Greys_r, interpolation='nearest')
+      plt.show()
+#+end_src
