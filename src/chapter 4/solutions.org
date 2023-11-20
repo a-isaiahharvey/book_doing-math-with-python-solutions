@@ -159,7 +159,7 @@ To solve a polynomial inequality, use the ~solve_poly_inequality()~ function:
 #+end_example
 
 First, create the expression representing an inequality, $−x^2 + 4 < 0$, at (1) and refer to this expression with the label ~ineq_obj~. Then, extract the left side of the inequality—that is, the algebraic expression $−x^2 + 4$ —using the lhs attribute at (2). Next, create a Poly object at (3) to represent the polynomial we extracted at (2). The second argument passed when creating the object is the symbol object that represents the variable, x. At (4), extract the relational operator from the inequality object using the ~rel~ attribute. Finally, call the ~solve_poly_inequality()~ function with the polynomial object, ~p~, and ~rel~ as the two arguments. The program returns the solution as a list of tuples, with each tuple representing a solution for the inequality as the lower limit and the upper limit of the range of numbers. For this inequality, the solution is all numbers less than –2 and all numbers greater than 2.
-A /rational expression/ is an algebraic expression in which the numerator and denominator are both polynomials. Here’s an example of a rational inequality: $frac{x - 1}{x + 2} > 0$ For rational inequalities, use the solve_rational_inequalities() function:
+A /rational expression/ is an algebraic expression in which the numerator and denominator are both polynomials. Here’s an example of a rational inequality: $\frac{x - 1}{x + 2} > 0$ For rational inequalities, use the solve_rational_inequalities() function:
 
 #+begin_example
 >>> from sympy import Symbol, Poly, solve_rational_inequalities
