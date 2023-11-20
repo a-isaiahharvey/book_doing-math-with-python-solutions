@@ -1,0 +1,186 @@
+#+title: Chapter 7
+#+subtitle: Solving Calculus Problems
+#+author: Allister Isaiah Harvey
+#+property: header-args:python :python python3
+#+startup: showeverything
+#+options: toc:3
+
+* Challenge 1 - Verify the Continuity of a Function at a Point
+
+A necessary, but not sufficient, condition for a function to be differen- tiable at a point is that it must be continuous at that point. That is, the function must be defined at that point and its left-hand limit and right-hand limit must exist and be equal to the value of the function at that point. If $f(x)$ is the function and $x = a$ is the point we are interested in evaluating, this is mathematically stated as $\lim _{x \to a^+}f(x)=\lim _{x \to a^-}f(x)=f(x)$
+
+Your challenge here is to write a program that will (1) accept a single- variable function and a value of that variable as inputs and (2) check whether the input function is continuous at the point where the variable assumes the value input.
+
+Here is a sample working of the completed solution:
+
+#+begin_example
+Enter a function in one variable: 1/x
+Enter the variable: x
+Enter the point to check the continuity at: 1 
+1/x is continuous at 1.0
+#+end_example
+
+The function 1/x is discontinuous at 0, so let’s check that:
+
+#+begin_example
+Enter a function in one variable: 1/x
+Enter the variable: x
+Enter the point to check the continuity at: 0 
+1/x is not continuous at 0.0
+#+end_example
+
+#+begin_src python :tangle 7_1.py
+  from sympy import Limit, Symbol, sympify, SympifyError
+
+  def check_continuity(f, var, a):
+      l1 = Limit(f, var, a, dir='+').doit()
+      l2 = Limit(f, var, a, dir='-').doit()
+      f_val = f.subs({var:a})
+
+      if l1 == l2 and f_val == l1:
+          print('{0} is continuous at {1}'.format(f, a))
+      else:
+          print('{0} is not continuous at {1}'.format(f, a))
+
+  if __name__ == '__main__':
+      f = input('Enter a function in one variable: ')
+      var = input('Enter the variable: ')
+      a = float(input('Enter the point to check the continuity at: '))
+      try:
+          f = sympify(f)
+      except SympifyError:
+          print('Invalid function entered')
+      else:
+          var = Symbol(var)
+          d = check_continuity(f, var, a)
+#+end_src
+
+* Challenge 2 - Implement the Gradient Descent
+
+The gradient descent method is used to find the minimum value of a function. Similar to the gradient ascent method, the gradient descent method is an iterative method: we start with an initial value of the variable and gradu- ally get closer to the variable value that corresponds to the minimum value of the function. The step that gets us closer is the equation $x_{new} = x_{old} - \lambda \frac{df}{dx}$, where λ is the step size and $\frac{df}{dx}$ is the result of differentiating the function. Thus, the only difference from the gradient ascent method is how we obtain the value of ~x_new~ from ~x_old~.
+
+Your challenge is to implement a generic program using the gradient descent algorithm to find the minimum value of a single-variable function specified as input by the user. The program should also create a graph of the function and show all the intermediate values it found before find- ing the minimum. (You may want to refer to Figure 7-5 on page 193.)
+
+#+begin_src python :tangle 7_2.py
+  from sympy import Derivative, Symbol, sympify, solve
+  import matplotlib.pyplot as plt
+
+  def grad_descent(x0, f1x, x):
+      # check if f1x=0 has a solution
+      if not solve(f1x):
+          print('Cannot continue, solution for {0}=0 does not exist'.format(f1x))
+          return None
+      epsilon =  1e-6
+      step_size = 1e-4
+      x_old = x0
+      x_new = x_old - step_size*f1x.subs({x:x_old}).evalf()
+
+      # list to store the X values traversed
+      X_traversed = []
+      while abs(x_old - x_new) > epsilon:
+          X_traversed.append(x_new)
+          x_old = x_new
+          x_new = x_old-step_size*f1x.subs({x:x_old}).evalf()
+
+      return x_new, X_traversed
+
+  def frange(start, final, interval):
+
+      numbers = []
+      while start < final:
+          numbers.append(start)
+          start = start + interval
+    
+      return numbers
+
+  def create_plot(X_traversed, f, var):
+      # First create the graph of the function itself
+      x_val = frange(-1, 1, 0.01)
+      f_val = [f.subs({var:x}) for x in x_val]
+      plt.plot(x_val, f_val, 'bo')
+      # calculate the function value at each of the intermediate
+      # points traversed
+      f_traversed = [f.subs({var:x}) for x in X_traversed]
+      plt.plot(X_traversed, f_traversed, 'r.')
+      plt.legend(['Function', 'Intermediate points'], loc='best')
+      plt.show()
+
+  if __name__ == '__main__':
+
+      f = input('Enter a function in one variable: ')
+      var = input('Enter the variable to differentiate with respect to: ')
+      var0 = float(input('Enter the initial value of the variable: '))
+      try:
+          f = sympify(f)
+      except SympifyError:
+          print('Invalid function entered')
+      else:
+          var = Symbol(var)
+          d = Derivative(f, var).doit()
+          var_min, X_traversed = grad_descent(var0, d, var)
+          if var_min:
+              print('{0}: {1}'.format(var.name, var_min))
+              print('Minimum value: {0}'.format(f.subs({var:var_min})))
+              create_plot(X_traversed, f, var)
+#+end_src
+
+* Challenge 3 - Area Between Two Curves
+
+We learned tht the integral $\int_{a}^{b} f(x) dx$ expresses the area enclosed by the function $f(x)$, with the $x-axis$ between $x = a$ and $x = b$. The area between two curves is thus expressed as the integral $\int_{a}^{b} (f(x)-g(x)) dx$, where $a$ and $b$ are the points of intersection of the two curves with $a < b$. The function $f(x)$ is referred to as the upper function and $g(x)$ as the lower function. Figure 7-9 illustrates this, assuming $f(x) = x$ and $g(x) = x2$, with $a = 0$ and $b = 1$.
+
+
+Your challenge here is to write a program that will allow the user to input any two single-variable functions of $x$ and print the enclosed area between the two. The program should make it clear that the first function entered should be the upper function, and it should also ask for the values of $x$ between which to find the area.
+
+#+begin_src python :tangle 7_3.py
+  from sympy import Integral, Symbol, SympifyError, sympify
+
+  def find_area(f1x, f2x, var, a, b):
+      a = Integral(f1x-f2x, (var, a, b)).doit()
+      return a
+
+  if __name__ == '__main__':
+      f1x = input('Enter the upper function in one variable: ')
+      f2x = input('Enter the lower upper function in one variable: ')
+      var = input('Enter the variable: ')
+      l = float(input('Enter the lower bound of the enclosed region: '))
+      u = float(input('Enter the upper bound of the enclosed region: '))
+    
+      try:
+          f1x = sympify(f1x)
+          f2x = sympify(f2x)
+      except SympifyError:
+          print('One of the functions entered is invalid')
+      else:
+          var = Symbol(var)
+          print('Area enclosed by {0} and {1} is: {2} '.format(f1x, f2x, find_area(f1x, f2x, var, l, u)))
+#+end_src
+
+* Challenge 4 - Finding the Length of a Curve
+
+Let’s say you just completed cycling along a road that looks roughly like Figure 7-10. Because you didn’t have an odometer, you want to know whether there’s a mathematical way to determine the distance you cycled. First, we’ll need to find an equation—even an approximation will do— that describes this path.
+
+Notice how it looks very similar to the quadratic functions we’ve discussed in the earlier chapters? In fact, for this challenge, let’s assume that the equation is $y = f(x) = 2x^2 + 3x +1$ and that you cycled from point A (−5, 36) to point B (10, 231). To find the length of this arc—that is, the distance you cycled—we’ll need to calculate the integral $\int_{a}^{b} \sqrt{1 + (\frac{dy}{dx})^2 } dx$, where $y$ describes the preceding function. Your challenge here is to write a program that will calculate the length of the arc, /AB/.
+You may also want to generalize your solution so that it allows you to find the length of the arc between any two points for any arbitrary function, $f(x)$.
+
+#+begin_src python :tangle 7_4.py
+  from sympy import Derivative, Integral, Symbol, sqrt, SympifyError, sympify
+
+  def find_length(fx, var, a, b):
+      deriv = Derivative(fx, var).doit()
+      length = Integral(sqrt(1+deriv**2), (var, a, b)).doit().evalf()
+      return length
+
+  if __name__ == '__main__':
+      f = input('Enter a function in one variable: ')
+      var = input('Enter the variable: ')
+      l = float(input('Enter the lower limit of the variable: '))
+      u = float(input('Enter the upper limit of the variable: '))
+    
+      try:
+          f = sympify(f)
+      except SympifyError:
+          print('Invalid function entered')
+      else:
+          var = Symbol(var)
+          print('Length of {0} between {1} and {2} is: {3} '.format(f, l, u, find_length(f, var, l, u)))
+#+end_src
