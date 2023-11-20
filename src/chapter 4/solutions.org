@@ -1,0 +1,259 @@
+#+title: Chapter 4
+#+subtitle: Algebra and Symbolic Math with SymPy
+#+author: Allister Isaiah Harvey
+#+property: header-args:python :python python3
+#+startup: showeverything
+#+options: toc:3
+
+* Challenge 1 - Factor Finder
+
+You learned about the ~factor()~ function, which prints the factors of an expression. Now that you know how your program can handle expressions input by a user, write a program that will ask the user to input an expression, calculate its factors, and print them. Your program should be able to handle invalid input by making use of exception handling.
+
+#+begin_src python :tangle 4_1.py
+  from sympy import factor, sympify, SympifyError
+
+  def factorize(expr):
+      return factor(expr)
+
+  if __name__ == '__main__':
+      expr = input('Enter an expression to factorize: ')
+      try:
+          expr_obj = sympify(expr)
+      except SympifyError:
+          print('Invalid expression entered as input')
+      else:
+          print(factorize(expr_obj))
+#+end_src
+
+* Challenge 2 - Graphical Equation Solver
+
+Earlier, you learned how to write a program that prompts the user to input an expression such as $3x + 2y − 6$ and create the corresponding graph. Write a program that asks the user for two expressions and then graphs them both, as follows:
+
+#+begin_example
+>>> expr1 = input('Enter your first expression in terms of x and y: ')
+>>> expr2 = input('Enter your second expression in terms of x and y: ')
+#+end_example
+
+Now, ~expr1~ and ~expr2~ will store the two expressions input by the user. You should convert both of these into SymPy objects using the ~sympify()~ step in a ~try...except~ block.
+All you need to do from here is plot these two expressions instead of one.
+Once you’ve completed this, enhance your program to print the solution—the pair of $x$ and $y$ values that satisfies both equations. This will also be the spot where the two lines on the graph intersect. (Hint: Refer to how we used the ~solve()~ function earlier to find the solution of a system of two linear equations.)
+
+#+begin_src python :tangle 4_2.py
+  from sympy import Symbol, sympify, solve, SympifyError
+  from sympy.plotting import plot
+
+  def solve_plot_equations(eq1, eq2, x, y):
+      # Solve
+      solution = solve((eq1, eq2), dict=True)
+      if solution:
+          print('x: {0} y: {1}'.format(solution[0][x], solution[0][y]))
+      else:
+          print('No solution found')
+      # Plot
+      eq1_y = solve(eq1,'y')[0]
+      eq2_y = solve(eq2, 'y')[0]
+      plot(eq1_y, eq2_y, legend=True)
+    
+ 
+
+  if __name__=='__main__':
+
+      eq1 = input('Enter your first equation : ')
+      eq2 = input('Enter your second equation: ')
+
+      try:
+          eq1 = sympify(eq1)
+          eq2 = sympify(eq2)
+      except SympifyError:
+          print('Invalid input')
+      else:
+          x = Symbol('x')
+          y = Symbol('y')
+          # check if the expressions consist of only two variables
+          eq1_symbols = eq1.atoms(Symbol)
+          eq2_symbols = eq2.atoms(Symbol)
+        
+          if len(eq1_symbols)> 2 or len(eq2_symbols) > 2:
+              print('The equations must have only two variables - x and y')
+          elif x not in eq1_symbols or y not in eq1_symbols:
+              print('First equation must have only x and y variables')
+          elif x not in eq2_symbols or y not in eq2_symbols:
+              print('Second equation must have only x and y variables')       
+          else:
+              solve_plot_equations(eq1, eq2, x, y)
+#+end_src
+
+* Summing a Series
+
+We saw how to find the sum of a series in “Printing a Series” on page 99. There, we manually added the terms of the series by looping over all the terms. Here’s a snippet from that program:
+
+#+begin_src python
+  for i in range(2, n+1):
+      series = series + (x**i)/i
+#+end_src
+
+SymPy’s ~summation()~ function can be directly used to find such summations. The following example prints the sum of the first five terms of the series we considered earlier:
+
+#+begin_example
+>>> from sympy import Symbol, summation, pprint
+>>> x = Symbol('x')
+>>> n = Symbol('n')
+>>> s = summation(x**n/n, (n, 1, 5))
+>>> pprint(s)
+x⁵   x⁴   x³   x²
+-- + -- + -- + -- + x
+5    4    3    2
+#+end_example
+
+We call the ~summation()~ function at (1), with the first argument being the nth term of the series and the second argument being a tuple that states the range of n. We want the sum of the first five terms here, so the second argu- ment is (n, 1, 5).
+Once you have the sum, you can use the ~subs()~ method to substitute a value for $x$ to find the numerical value of the sum:
+
+#+begin_example
+>>> s.subs({x:1.2})
+3.51206400000000
+#+end_example
+
+Your challenge is to write a program that’s capable of finding the sum of an arbitrary series when you supply the nth term of the series and the number of terms in it. Here’s an example of how the program would work:
+
+#+begin_example
+Enter the nth term: a+(n-1)*d
+Enter the number of terms: 3
+3·a + 3·d
+#+end_example
+
+In this example, the nth term supplied is that of an /arithmetic progression/. Starting with a and d as the /common difference/, the number of terms up
+to which the sum is to be calculated is 3. The sum turns out to be $3a + 3d$, which agrees with the known formula for the same.
+
+#+begin_src python :tangle 4_3.py
+from sympy import summation, sympify, Symbol, pprint
+
+def find_sum(n_term, num_terms):
+    n = Symbol('n')
+    s = summation(n_term, (n, 1, num_terms))
+    pprint(s)
+
+
+if __name__ == '__main__':
+    n_term = sympify(input('Enter the nth term: '))
+    num_terms = int(input('Enter the number of terms: '))
+
+    find_sum(n_term, num_terms)      
+#+end_src
+
+* Challenge 4 - Solving Single-Variable Inequalities
+
+You’ve seen how to solve an equation using SymPy’s ~solve()~ function. But SymPy is also capable of solving single-variable inequalities, such as $x + 5 > 3$ and $sinx − 0.6 > 0$. That is, SymPy can solve relations besides equality, like >, <, and so on. For this challenge, create a function, ~isolve()~, that will take any inequality, solve it, and then return the solution.
+First, let’s learn about the SymPy functions that will help you implement this. The inequality-solving functions are available as three separate functions for polynomial, rational, and all other inequalities. We’ll need to pick the right function to solve various inequalities, or we’ll get an error.
+A /polynomial/ is an algebraic expression consisting of a variable and coefficients and involving only the operations of addition, subtraction, and multiplication and only positive powers of the variable. An example of a polynomial inequality is $x^2 + 4 < 0$.
+To solve a polynomial inequality, use the ~solve_poly_inequality()~ function:
+
+#+begin_example
+>>> from sympy import Poly, Symbol, solve_poly_inequality
+>>> x = Symbol('x')
+>>> ineq_obj = -x**2 + 4 < 0
+>>> lhs = ineq_obj.lhs
+>>> p = Poly(lhs, x)
+>>> rel = ineq_obj.rel_op
+>>> solve_poly_inequality(p, rel)
+[(-oo, -2), (2, oo)]
+#+end_example
+
+First, create the expression representing an inequality, $−x^2 + 4 < 0$, at (1) and refer to this expression with the label ~ineq_obj~. Then, extract the left side of the inequality—that is, the algebraic expression $−x^2 + 4$ —using the lhs attribute at (2). Next, create a Poly object at (3) to represent the polynomial we extracted at (2). The second argument passed when creating the object is the symbol object that represents the variable, x. At (4), extract the relational operator from the inequality object using the ~rel~ attribute. Finally, call the ~solve_poly_inequality()~ function with the polynomial object, ~p~, and ~rel~ as the two arguments. The program returns the solution as a list of tuples, with each tuple representing a solution for the inequality as the lower limit and the upper limit of the range of numbers. For this inequality, the solution is all numbers less than –2 and all numbers greater than 2.
+A /rational expression/ is an algebraic expression in which the numerator and denominator are both polynomials. Here’s an example of a rational inequality: $frac{x - 1}{x + 2} > 0$ For rational inequalities, use the solve_rational_inequalities() function:
+
+#+begin_example
+>>> from sympy import Symbol, Poly, solve_rational_inequalities
+>>> x = Symbol('x')
+>>> ineq_obj = ((x-1)/(x+2)) > 0
+>>> lhs = ineq_obj.lhs
+>>> numer, denom = lhs.as_numer_denom()
+>>> p1 = Poly(numer)
+>>> p2 = Poly(denom)
+>>> rel = ineq_obj.rel_op
+>>> solve_rational_inequalities([[((p1, p2), rel)]])
+(-oo, -2) U (1, oo)
+#+end_example
+
+Create an inequality object representing our example rational inequality at (1) and then extract the rational expression using the lhs attribute. Separate out the numerator and the denominator into the labels numer and denom using the ~as_numer_denom()~ method at (2), which returns a tuple with the numerator and denominator as the two members. Then, create two polynomial objects, ~p1~ and ~p2~, representing the numerator and denominator, respectively. Retrieve the relational operator and call the ~solve_rational_inequalities()~ function, passing it the two polynomial objects— ~p1~ and ~p2~ —and the relational operator.
+The program returns the solution (-oo, -2) ~U~ (1, oo), where U denotes that the solution is a /union/ of the two sets of solutions consisting of all numbers less than −2 and all numbers greater than 1. (We’ll learn about sets in Chapter 5.)
+Finally, $sinx − 0.6 > 0$ is an example of an inequality that belongs to neither the polynomial nor rational expression categories. If you have such an inequality to solve, use the ~solve_univariate_inequality()~ function:
+
+#+begin_example
+>>> from sympy import Symbol, solve, solve_univariate_inequality, sin
+>>> x = Symbol('x')
+>>> ineq_obj = sin(x) - 0.6 > 0
+>>> solve_univariate_inequality(ineq_obj, x, relational=False) (0.643501108793284, 2.49809154479651)
+#+end_example
+
+Create an inequality object representing the inequality $sin(x) – 0.6 > 0$ and then call the ~solve_univariate_inequality()~ function with the first two arguments as the inequality object, ~ineq_obj~, and the symbol object, ~x~. The keyword argument ~relational=False~ specifies to the function that we want the solution to be returned as a /set/. The solution for this inequality turns out to be all numbers lying between the first and second members of the tuple the program returns.
+
+Now remember—your challenge is (1) to create a function, ~isolve()~, that will take any inequality and (2) to choose one of the appropriate functions discussed in this section to solve it and return the solution. The following hints may be useful to implement this function.
+The ~is_polynomial()~ method can be used to check whether an expression is a polynomial or not:
+
+#+begin_example
+>>> x = Symbol('x')
+>>> expr = x**2 - 4
+>>> expr.is_polynomial()
+True
+>>> expr = 2*sin(x) + 3 >>> expr.is_polynomial()
+False
+#+end_example
+
+The ~is_rational_function()~ can be used to check whether an expression is a rational expression:
+
+#+begin_example
+>>> expr = (2+x)/(3+x)
+>>> expr.is_rational_function()
+True
+>>> expr = 2+x
+>>> expr.is_rational_function()
+True
+>>> expr = 2+sin(x)
+>>> expr.is_rational_function()
+False
+#+end_example
+
+The ~sympify()~ function can convert an inequality expressed as a string to an inequality object:
+
+#+begin_example
+>>> from sympy import sympify >>> sympify('x+3>0')
+x + 3 > 0
+#+end_example
+
+When you run your program, it should ask the user to input an inequality expression and print back the solution.
+
+#+begin_src python :tangle 4_4.py
+  from sympy import Symbol, sympify, SympifyError
+  from sympy import solve_poly_inequality, solve_rational_inequalities, solve_univariate_inequality, Poly
+  from sympy.core.relational import Relational, Equality
+
+  def isolve(ineq_obj):
+      x = Symbol('x')
+
+      expr = ineq_obj.lhs
+      rel = ineq_obj.rel_op
+    
+      if expr.is_polynomial():
+          p = Poly(expr, x)
+          return solve_poly_inequality(p, rel)
+      elif expr.is_rational_function():
+          p1, p2 = expr.as_numer_denom()
+          num  = Poly(p1)
+          denom = Poly(p2)
+          return solve_rational_inequalities([[((num, denom), rel)]])
+      else:
+          return solve_univariate_inequality(ineq_obj , x, relational=False)
+
+  if __name__ == '__main__':
+      ineq = input('Enter the inequality to solve: ')
+      try:
+          ineq_obj = sympify(ineq)
+      except SympifyError:
+          print('Invalid inequality')
+      else:
+          # We check if the input expression is an inequality here
+          if isinstance(ineq_obj, Relational) and not isinstance(ineq_obj, Equality):
+              print(isolve(ineq_obj))
+          else:
+              print('Invalid inequality')
+#+end_src
