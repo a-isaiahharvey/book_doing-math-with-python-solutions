@@ -10,7 +10,9 @@ These are the packages that are required to be installed before running the sour
 
 #+begin_src text :tangle requirements.txt
 matplotlib
+matplotlib_venn
 pyowm
+sympy
 #+end_src
 
 * [[file:src/chapter 1/solutions.org][Chapter 1]]
