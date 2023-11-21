@@ -11,7 +11,8 @@ If you enter a search term like “New York weather” in Google's search engine
 Using a city of your choice, find the temperature at different points of the day. Use the data to create two lists in your program and to create a graph with the time of day on the x-axis and the corresponding temperature on the y-axis. The graph should tell you how the temperature varies with the time of day. Try a different city and see how the two cities compare by plotting both lines on the same graph.
 The time of day may be indicated by strings such as '10:11 AM' or '09:21 PM'.
 
-#+begin_src python :tangle 2_1.py
+#+begin_src python :tangle 2_1.py :results output file :file nyc_weather_matplotlib.png
+  import sys
   import matplotlib.pyplot as plt
 
   def plot_forecast():
@@ -22,11 +23,15 @@ The time of day may be indicated by strings such as '10:11 AM' or '09:21 PM'.
 
       plt.plot(time_interval, forecast_temp, 'o-')
       plt.xticks(time_interval, time_of_day)
+      plt.savefig(sys.stdout.buffer)
       plt.show()
 
   if __name__ == '__main__':
       plot_forecast()
 #+end_src
+
+#+RESULTS:
+[[file:nyc_weather_matplotlib.png]]
 
 * Challenge 2 - Exploring a Quadratic Function Visually
 
@@ -62,30 +67,35 @@ a graph of the function. Try using at least 10 values for x instead of the 6 abo
 
 Once you've created the graph, spend some time analyzing how the value of $y$ varies with respect to $x$. Is the variation linear or nonlinear?
 
-#+begin_src python :tangle 2_2.py
-import matplotlib.pyplot as plt
+#+begin_src python :tangle 2_2.py :results output file :file quadratic_fuction.png
+  import sys
+  import matplotlib.pyplot as plt
 
 
-def quad_func_calc():
-    x_values = [-1, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    y_values = []
-    for x in x_values:
-        # Calculate the value of quadratic function
-        y_values.append(x**2 + x * 2 + 1)
-    draw_graph(x_values, y_values)
+  def quad_func_calc():
+      x_values = [-1, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+      y_values = []
+      for x in x_values:
+          # Calculate the value of quadratic function
+          y_values.append(x**2 + x * 2 + 1)
+      draw_graph(x_values, y_values)
 
 
-def draw_graph(x, y):
-    plt.plot(x, y, marker='o')
-    plt.xlabel('x-axis')
+  def draw_graph(x, y):
+      plt.plot(x, y, marker='o')
+      plt.xlabel('x-axis')
 
-    plt.ylabel('y-axis')
-    plt.title('Quadratic Function')
+      plt.ylabel('y-axis')
+      plt.title('Quadratic Function')
 
 
-if __name__ == '__main__':
-    quad_func_calc()
+  if __name__ == '__main__':
+      quad_func_calc()
+      plt.savefig(sys.stdout.buffer)
 #+end_src
+
+#+RESULTS:
+[[file:quadratic_fuction.png]]
 
 * Challenge 3 - Enhanced Projectile Trajectory Comparison Program
 
@@ -275,7 +285,8 @@ You may find the following function, which returns a list of the first n Fibonac
       return series
 #+end_src
  
-#+begin_src python :tangle 2_5.py
+#+begin_src python :tangle 2_5.py :results output file :file golden_ratio.png
+  import sys
   import matplotlib.pyplot as plt
 
   def fibo(n):
@@ -304,6 +315,7 @@ You may find the following function, which returns a list of the first n Fibonac
       plt.title('Ratio between Fibonacci numbers & Golden ratio')
       plt.ylabel('Ratio')
       plt.xlabel('No.')
+      plt.savefig(sys.stdout.buffer)
       plt.show()
 
   if __name__ == '__main__':
@@ -313,3 +325,6 @@ You may find the following function, which returns a list of the first n Fibonac
       plot_ratio(series)
 
 #+end_src
+
+#+RESULTS:
+[[file:golden_ratio.png]]

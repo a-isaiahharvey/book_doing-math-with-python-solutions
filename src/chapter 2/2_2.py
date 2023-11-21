@@ -1,3 +1,4 @@
+import sys
 import matplotlib.pyplot as plt
 
 
@@ -20,3 +21,4 @@ def draw_graph(x, y):
 
 if __name__ == '__main__':
     quad_func_calc()
+    plt.savefig(sys.stdout.buffer)

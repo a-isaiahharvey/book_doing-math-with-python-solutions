@@ -46,6 +46,8 @@ if __name__ == '__main__':
     enhanced_multi_table(float(a), b)
 #+end_src
 
+#+RESULTS:
+
 * Challenge 3 - Enhanced Unit Converter
 
 The unit conversion program we wrote in this chapter is limited to conversions between kilometers and miles. Try extending the program to convert between units of mass (such as kilograms and pounds) and between units of temperature (such as Celsius and Fahrenheit).
@@ -162,6 +164,8 @@ Write a calculator that can perform the basic mathematical operations on two fra
       else:
           print('Input a valid operation')
 #+end_src
+
+#+RESULTS:
 
 * Challenge 5 - Give Exit Power to the User
 
@@ -380,3 +384,5 @@ Try rewriting some of the other programs in this chapter so that they continue e
           if answer == 'y':
               break
 #+end_src
+
+#+RESULTS:

@@ -1,3 +1,4 @@
+import sys
 import matplotlib.pyplot as plt
 
 def plot_forecast():
@@ -8,6 +9,7 @@ def plot_forecast():
 
     plt.plot(time_interval, forecast_temp, 'o-')
     plt.xticks(time_interval, time_of_day)
+    plt.savefig(sys.stdout.buffer)
     plt.show()
 
 if __name__ == '__main__':

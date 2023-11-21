@@ -1,3 +1,4 @@
+import sys
 import matplotlib.pyplot as plt
 
 def fibo(n):
@@ -26,6 +27,7 @@ def plot_ratio(series):
     plt.title('Ratio between Fibonacci numbers & Golden ratio')
     plt.ylabel('Ratio')
     plt.xlabel('No.')
+    plt.savefig(sys.stdout.buffer)
     plt.show()
 
 if __name__ == '__main__':

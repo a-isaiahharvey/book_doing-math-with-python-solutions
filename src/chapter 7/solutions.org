@@ -2,7 +2,7 @@
 #+subtitle: Solving Calculus Problems
 #+author: Allister Isaiah Harvey
 #+property: header-args:python :python python3
-#+startup: showeverything
+#+startup: showeverything latexpreview
 #+options: toc:3
 
 * Challenge 1 - Verify the Continuity of a Function at a Point
