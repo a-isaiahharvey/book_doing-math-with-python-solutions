@@ -1,44 +1,2106 @@
-#+title: Doing Math with Python Solutions
-#+author: Allister Isaiah Harvey
-#+date: 17-11-2023
-#+startup: showeverything
+# Created 2023-11-23 Thu 19:44
 #+options: toc:3
+#+title: Doing Math with Python Solutions
+#+date: 17-11-2023
+#+author: Allister Isaiah Harvey
+#+startup: showeverything
+#+export: org-org-export-to-org
+#+export_file_name: ../README.org
 
 * Requirements
 
 These are the packages that are required to be installed before running the source code
 
-#+begin_src text :tangle requirements.txt
-matplotlib
-matplotlib_venn
-pyowm
-sympy
+#+begin_src text
+  matplotlib
+  matplotlib_venn
+  pyowm
+  sympy
 #+end_src
 
 * [[src/chapter 1/solutions.org][Chapter 1]]
 
-#+INCLUDE: "src/chapter 1/solutions.org" :lines "7-"
+** Challenge 1 - Even-Odd Vending Machine
+
+Try writing an “even-odd vending machine,” which will take a number as input and do two things:
+
+1. Print whether the number is even or odd.
+
+2. Display the number followed by the next 9 even or odd numbers.
+
+If the input is 2, the program should print even and then print 2, 4, 6, 8, 10, 12, 14, 16, 18, 20. Similarly, if the input is 1, the program should print odd and then print 1, 3, 5, 7, 9, 11, 13, 15, 17, 19. 
+
+Your program should use the is_integer() method to display an error message if the input is a number with significant digits beyond the decimal point.
+
+#+begin_src python
+  def even_odd(num):
+      if num % 2 == 0:
+          print("even")
+      else:
+          print("odd")
+      for i in range(0, 20, 2):
+          print(num + i)
+
+  if __name__ == '__main__':
+      even_odd(2)
+#+end_src
+
+** Challenge 2 - Enhanced Multiplication Table Generator
+
+Our multiplication table generator is cool, but it prints only the first 10 multiples. Enhance the generator so that the user can specify both the number and up to which multiple. For example, I should be able to input that I want to see a table listing the first 15 multiples of 9.
+
+#+begin_src python
+  def enhanced_multi_table(a, end_mult):
+      for i in range(1, int(end_mult) + 1):
+          print('{0} x {1} = {2}'.format(a, i, a * i))
+
+
+  if __name__ == '__main__':
+      a = input('Enter a number: ')
+      b = input('Enter the last multiple: ')
+      enhanced_multi_table(float(a), b)
+#+end_src
+
+** Challenge 3 - Enhanced Unit Converter
+
+The unit conversion program we wrote in this chapter is limited to conversions between kilometers and miles. Try extending the program to convert between units of mass (such as kilograms and pounds) and between units of temperature (such as Celsius and Fahrenheit).
+
+#+begin_src python
+  def print_menu():
+      print('1. Kilometers to Miles')
+      print('2. Miles to Kilometers')
+      print('3. Celsius to Fahrenheit')
+      print('4. Fahrenheit to Celsius')
+      print('5. Kilograms to Pounds')
+      print('6. Pounds to Kilograms')
+
+
+  def km_mi():
+      km = float(input('Enter distance in kilometers: '))
+      mi = km / 1.609
+
+      print('Distance in miles: {0}'.format(mi))
+
+
+  def mi_km():
+      mi = float(input('Enter distance in miles: '))
+      km = mi * 1.609
+
+      print('Distance in kilometers: {0}'.format(km))
+
+
+  def c_f():
+      c = float(input('Enter temperature in Celsius: '))
+      f = c * (9 / 5) + 32
+
+      print('Temperature in Fahrenheit: {0}'.format(f))
+
+
+  def f_c():
+      f = float(input('Enter temperature in Fahrenheit: '))
+      c = (f - 32) * (5 / 9)
+
+      print('Temperature in Celsius: {0}'.format(c))
+
+
+  def kg_lbs():
+      kg = float(input('Enter mass in kilograms: '))
+      lbs = kg * 2.2046
+
+      print('Mass in pounds: {0}'.format(lbs))
+
+
+  def lbs_kg():
+      lbs = float(input('Enter mass in pounds: '))
+      kg = lbs / 2.2046
+
+      print('Mass in kilograms: {0}'.format(kg))
+
+
+  if __name__ == '__main__':
+      print_menu()
+
+      choice = input('Which conversion would you like to do?: ')
+      if choice == '1':
+          km_mi()
+      elif choice == '2':
+          mi_km()
+      elif choice == '3':
+          c_f()
+      elif choice == '4':
+          f_c()
+      elif choice == '5':
+          kg_lbs()
+      elif choice == '6':
+          lbs_kg()
+#+end_src
+
+** Challenge 4 - Fraction Calculator
+
+Write a calculator that can perform the basic mathematical operations on two fractions. It should ask the user for two fractions and the operations the user user wants to carry out. As a head start, here's how you can write the program with only the addition operation:
+
+#+begin_src python
+  from fractions import Fraction
+
+
+  def add(a, b):
+      print('{0} + {1} = {2}'.format(a, b, a + b))
+
+
+  def subtract(a, b):
+      print('{0} - {1} = {2}'.format(a, b, a - b))
+
+
+  def multiply(a, b):
+      print('{0} * {1} = {2}'.format(a, b, a * b))
+
+
+  def divide(a, b):
+      print('{0} / {1} = {2}'.format(a, b, a / b))
+
+
+  if __name__ == '__main__':
+
+      a = Fraction(input('Enter first fraction: '))
+
+      b = Fraction(input('Enter second fraction: '))
+      op = str.lower(
+          input('Operation to perform - Add, Subtract, Mulitply, Divide: '))
+      if op == 'add':
+          add(a, b)
+      elif op == 'subtract':
+          subtract(a, b)
+      elif op == 'multiply':
+          multiply(a, b)
+      elif op == 'divide':
+          divide(a, b)
+      else:
+          print('Input a valid operation')
+#+end_src
+
+** Challenge 5 - Give Exit Power to the User
+
+All the programs we have written so far work only for one iteration of input and output. For example, consider the program to print the multiplication table: the user executes the program and enters a number; then the program prints the multiplication table and exits. If the user wanted to print the multiplication table of another number, the program would have to be rerun.
+It would be more convenient if the user could choose whether to exit or continue using the program. The key to writing such programs is to set up an infinite  loop, or a loop that doesn't exit unless explicitly asked to do so. Below, you can see an example of the layout for such a program:
+
+#+begin_src python
+  '''
+  Run until exit layout
+  '''
+  def fun():
+      print('I am in an endless loop')
+
+  if __name__ == '__main__':
+      while True:
+          fun()
+          answer = input('Do you want to exit? (y) for yes ')
+          if answer == 'y':
+              break
+#+end_src
+
+We define an infinite loop using while True atu. A while loop continues to execute unless the condition evaluates to False. Because we chose the loop's condition to be the constant value True, it will keep running forever unless we interrupt it somehow. Inside the loop, we call the function fun(), which prints the string I am in an endless loop. Atv, the user is asked “Do you want to exit?” If the user enters y as the input, the program exits out of the loop using the break statement (break exits out of the innermost loop without executing any other statement in that loop). If the user enters any other input (or none at all, just pressing ENTER), the while loop continues execution—that is, it prints the string again and continues doing so until the user wishes to exit. Here is a sample run of the program:
+
+#+begin_example
+  I am in an endless loop
+  Do you want to exit? (y) for yes n 
+  I am in an endless loop
+  Do you want to exit? (y) for yes n 
+  I am in an endless loop
+  Do you want to exit? (y) for yes n 
+  I am in an endless loop
+  Do you want to exit? (y) for yes y
+#+end_example
+
+Based on this example, let's rewrite the multiplication table generator so that it keeps going until the user wants to exit. The new version of the program is shown below:
+
+#+begin_src python
+  '''
+  Multiplication table printer with
+  exit power to the user
+  '''
+
+  def multi_table(a):
+
+      for i in range(1, 11):
+          print('{0} x {1} = {2}'.format(a, i, a*i))
+
+  if __name__ == '__main__':
+
+      while True:
+          a = input('Enter a number: ')
+          multi_table(float(a))
+
+          answer = input('Do you want to exit? (y) for yes ')
+          if answer == 'y':
+              break
+#+end_src
+
+If you compare this program to the one we wrote earlier, you'll see that the only change is the addition of the while loop, which includes the prompt asking the user to input a number and the call to the multi_table() function.
+
+When you run the program, the program will ask for a number and print its multiplication table, as before. However, it will also subsequently ask whether the user wants to exit the program. If the user doesn't want to exit, the program will be ready to print the table for another number. Here is a sample run:
+
+#+begin_example
+  Enter a number: 2
+  2.000000 x 1.000000 = 2.000000 
+  2.000000 x 2.000000 = 4.000000 
+  2.000000 x 3.000000 = 6.000000 
+  2.000000 x 4.000000 = 8.000000
+  2.000000 x 5.000000 = 10.000000 
+  2.000000 x 6.000000 = 12.000000 
+  2.000000 x 7.000000 = 14.000000 
+  2.000000 x 8.000000 = 16.000000 
+  2.000000 x 9.000000 = 18.000000 
+  2.000000 x 10.000000 = 20.000000
+
+  Do you want to exit? (y) for yes n
+  Enter a number:
+#+end_example
+
+Try rewriting some of the other programs in this chapter so that they continue executing until asked by the user to exit.
+
+#+begin_src python
+  def even_odd(num):
+        if num % 2 == 0:
+            print("even")
+        else:
+            print("odd")
+        for i in range(0, 20, 2):
+            print(num + i)
+
+  if __name__ == '__main__':
+
+      while True:
+          even_odd(2)
+          answer = input('Do you want to exit? (y) for yes ')
+          if answer == 'y':
+              break
+#+end_src
+
+#+begin_src python
+  def print_menu():
+      print('1. Kilometers to Miles')
+      print('2. Miles to Kilometers')
+      print('3. Celsius to Fahrenheit')
+      print('4. Fahrenheit to Celsius')
+      print('5. Kilograms to Pounds')
+      print('6. Pounds to Kilograms')
+
+
+  def km_mi():
+      km = float(input('Enter distance in kilometers: '))
+      mi = km / 1.609
+
+      print('Distance in miles: {0}'.format(mi))
+
+
+  def mi_km():
+      mi = float(input('Enter distance in miles: '))
+      km = mi * 1.609
+
+      print('Distance in kilometers: {0}'.format(km))
+
+
+  def c_f():
+      c = float(input('Enter temperature in Celsius: '))
+      f = c * (9 / 5) + 32
+
+      print('Temperature in Fahrenheit: {0}'.format(f))
+
+
+  def f_c():
+      f = float(input('Enter temperature in Fahrenheit: '))
+      c = (f - 32) * (5 / 9)
+
+      print('Temperature in Celsius: {0}'.format(c))
+
+
+  def kg_lbs():
+      kg = float(input('Enter mass in kilograms: '))
+      lbs = kg * 2.2046
+
+      print('Mass in pounds: {0}'.format(lbs))
+
+
+  def lbs_kg():
+      lbs = float(input('Enter mass in pounds: '))
+      kg = lbs / 2.2046
+
+      print('Mass in kilograms: {0}'.format(kg))
+
+
+  if __name__ == '__main__':
+
+      while True:
+          print_menu()
+
+          choice = input('Which conversion would you like to do?: ')
+          if choice == '1':
+              km_mi()
+          elif choice == '2':
+              mi_km()
+          elif choice == '3':
+              c_f()
+          elif choice == '4':
+              f_c()
+          elif choice == '5':
+              kg_lbs()
+          elif choice == '6':
+              lbs_kg()
+
+          answer = input('Do you want to exit? (y) for yes ')
+          if answer == 'y':
+              break
+#+end_src
+
+#+begin_src python
+  from fractions import Fraction
+
+
+  def add(a, b):
+      print('{0} + {1} = {2}'.format(a, b, a + b))
+
+
+  def subtract(a, b):
+      print('{0} - {1} = {2}'.format(a, b, a - b))
+
+
+  def multiply(a, b):
+      print('{0} * {1} = {2}'.format(a, b, a * b))
+
+
+  def divide(a, b):
+      print('{0} / {1} = {2}'.format(a, b, a / b))
+
+
+  if __name__ == '__main__':
+
+      while True:
+          a = Fraction(input('Enter first fraction: '))
+
+          b = Fraction(input('Enter second fraction: '))
+          op = str.lower(
+              input('Operation to perform - Add, Subtract, Mulitply, Divide: '))
+          if op == 'add':
+              add(a, b)
+          elif op == 'subtract':
+              subtract(a, b)
+          elif op == 'multiply':
+              multiply(a, b)
+          elif op == 'divide':
+              divide(a, b)
+          else:
+              print('Input a valid operation')
+
+          answer = input('Do you want to exit? (y) for yes ')
+          if answer == 'y':
+              break
+#+end_src
 
 * [[src/chapter 2/solutions.org][Chapter 2]]
 
-#+INCLUDE: "src/chapter 2/solutions.org" :lines "7-"
+** Challenge 1 - How Does the Temperature Vary During the Day?
+
+If you enter a search term like “New York weather” in Google's search engine, you'll see, among other things, a graph showing the temperature at different times of the present day. Your task here is to re-create such a graph.
+Using a city of your choice, find the temperature at different points of the day. Use the data to create two lists in your program and to create a graph with the time of day on the x-axis and the corresponding temperature on the y-axis. The graph should tell you how the temperature varies with the time of day. Try a different city and see how the two cities compare by plotting both lines on the same graph.
+The time of day may be indicated by strings such as '10:11 AM' or '09:21 PM'.
+
+#+begin_src python
+  import sys
+  import matplotlib.pyplot as plt
+
+  def plot_forecast():
+
+      time_of_day = ['4 AM', '7 AM', '10 AM', '1 PM', '4 PM', '7PM', '10 PM']
+      forecast_temp = [71, 70, 74, 80, 82, 81, 76]
+      time_interval = range(1, len(time_of_day) + 1)
+
+      plt.plot(time_interval, forecast_temp, 'o-')
+      plt.xticks(time_interval, time_of_day)
+      plt.savefig(sys.stdout.buffer)
+      plt.show()
+
+  if __name__ == '__main__':
+      plot_forecast()
+#+end_src
+
+** Challenge 2 - Exploring a Quadratic Function Visually
+
+In Chapter 1, you learned how to find the roots of a quadratic equation, such as $x^2 + 2x + 1 = 0$. We can turn this equation into a function by writing it as $y = x^2 + 2x + 1$. For any value of $x$, the quadratic function produces some value for $y$. For example, when $x = 1$, $y = 4$. Here's a program that calculates the value of $y$ for six different values of $x$:
+
+#+begin_src python
+  '''
+  Quadratic function calculator
+  '''
+
+  # Assume values of x
+  x_values = [-1, 1, 2, 3, 4, 5]
+  for x in x_values:
+      # Calculate the value of the quadratic function
+      y = x**2 + 2*x + 1
+      print('x={0} y={1}'.format(x, y))
+#+end_src
+
+At, we create a list with six different values for $x$. The for loop starting at calculates the value of the function above for each of these values and uses the label $y$ to refer to the result. Next, we print the value of $x$ and the corresponding value of $y$. When you run the program, you should see the following output:
+
+#+begin_example
+  x=-1 y=0
+  x=1 y=4
+  x=2 y=9
+  x=3 y=16
+  x=4 y=25
+  x=5 y=36
+#+end_example
+
+Notice that the first line of the output is a root of the quadratic equa- tion because it's a value for x that makes the function equal to 0.
+Your programming challenge is to enhance this program to create
+a graph of the function. Try using at least 10 values for x instead of the 6 above. Calculate the corresponding y values using the function and then create a graph using these two sets of values.
+
+Once you've created the graph, spend some time analyzing how the value of $y$ varies with respect to $x$. Is the variation linear or nonlinear?
+
+#+begin_src python
+  import sys
+  import matplotlib.pyplot as plt
+
+
+  def quad_func_calc():
+      x_values = [-1, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+      y_values = []
+      for x in x_values:
+          # Calculate the value of quadratic function
+          y_values.append(x**2 + x * 2 + 1)
+      draw_graph(x_values, y_values)
+
+
+  def draw_graph(x, y):
+      plt.plot(x, y, marker='o')
+      plt.xlabel('x-axis')
+
+      plt.ylabel('y-axis')
+      plt.title('Quadratic Function')
+
+
+  if __name__ == '__main__':
+      quad_func_calc()
+      plt.savefig(sys.stdout.buffer)
+#+end_src
+
+** Challenge 3 - Enhanced Projectile Trajectory Comparison Program
+
+Your challenge here is to enhance the trajectory comparison program in a few ways. First, your program should print the time of flight, maximum horizontal distance, and maximum vertical distance traveled for each of the velocity and angle of projection combinations.
+The other enhancement is to make the program work with any number of initial velocity and angle of projection values, supplied by the user. For example, here's how the program should ask the user for the inputs:
+
+#+begin_example
+  How many trajectories? 3
+  Enter the initial velocity for trajectory 1 (m/s): 45
+  Enter the angle of projection for trajectory 1 (degrees): 45
+  Enter the initial velocity for trajectory 2 (m/s): 60
+  Enter the angle of projection for trajectory 2 (degrees): 45
+  Enter the initial velocity for trajectory(m/s) 3: 45
+  Enter the angle of projection for trajectory(degrees) 3: 90
+#+end_example
+
+Your program should also ensure that erroneous input is properly handled using a ~try...except~ block, just as in the original program.
+
+#+begin_src python
+
+  import matplotlib.pyplot as plt
+  import math
+
+  g = 9.8
+
+  def draw_graph(x, y):
+      plt.plot(x, y)
+      plt.xlabel('x-coordinate')
+      plt.ylabel('y-coordinate')
+      plt.title('Projectile motion at different initial velocities and angles')
+
+  def frange(start, final, interval):
+
+      numbers = []
+      while start < final:
+          numbers.append(start)
+          start = start + interval
+
+      return numbers
+
+  def draw_trajectory(u, theta, t_flight):
+      # list of x and y co-ordinates
+      x = []
+      y = []
+      intervals = frange(0, t_flight, 0.001)
+      for t in intervals:
+          x.append(u*math.cos(theta)*t)
+          y.append(u*math.sin(theta)*t - 0.5*g*t*t)
+
+      #create the graph
+      draw_graph(x, y)
+
+  if __name__ == '__main__':
+
+      num_trajectories = int(input('How many trajectories? '))
+
+      velocities = []
+      angles = []
+      for i in range(1, num_trajectories+1):
+          v = input('Enter the initial velocity for trajectory {0} (m/s): '.format(i))
+          theta = input('Enter the angle of projection for trajectory {0} (degrees): '.format(i))
+          velocities.append(float(v))
+          angles.append(math.radians(float(theta)))
+
+      for i in range(num_trajectories):
+          # calculate time of flight, maximum horizontal distance and
+          # maximum vertical distance
+          t_flight = 2*velocities[i]*math.sin(angles[i])/g
+          S_x = velocities[i]*math.cos(angles[i])*t_flight
+          S_y = velocities[i]*math.sin(angles[i])*(t_flight/2) - (1/2)*g*(t_flight/2)**2
+          print('Initial velocity: {0} Angle of Projection: {1}'.format(velocities[i], math.degrees(angles[i])))
+          print('T: {0} S_x: {1} S_y: {2}'.format(t_flight, S_x, S_y))
+          print()
+          draw_trajectory(velocities[i], angles[i], t_flight)
+
+      # Add a legend and show the graph
+      legends = []
+      for i in range(0, num_trajectories):
+          legends.append('{0} - {1}'.format(velocities[i], math.degrees(angles[i])))
+      plt.legend(legends)
+      plt.show()
+#+end_src
+
+** Challenge 4 - Visualizing Your Expenses
+
+I always find myself asking at the end of the month, “Where did all that money go?” I'm sure this isn't a problem I alone face.
+For this challenge, you'll write a program that creates a bar chart for easy comparison of weekly expenditures. The program should first ask for the number of categories for the expenditures and the weekly total expen- diture in each category, and then it should create the bar chart showing these expenditures.
+Here's a sample run of how the program should work:
+
+#+begin_example
+  Enter the number of categories: 4
+  Enter category: Food
+  Expenditure: 70
+  Enter category: Transportation Expenditure: 35
+  Enter category: Entertainment Expenditure: 30
+  Enter category: Phone/Internet Expenditure: 30
+#+end_example
+
+We haven't discussed creating a bar chart using matplotlib, so let's try an example.
+A bar chart can be created using matplotlib's barh() function, which
+is also defined in the pyplot module. Figure 2-17 shows a bar chart that illustrates the number of steps I walked during the past week. The days of the week—Sunday, Monday, Tuesday, and so forth—are referred to as the labels. Each horizontal bar starts from the y-axis, and we have to specify the y-coordinate of the center of this position for each of the bars. The length of each bar corresponds to the number of steps specified.
+The following program creates the bar chart:
+
+#+begin_src python
+  import matplotlib.pyplot as plt
+
+  def create_bar_chart(data, labels):
+      # Number of bars
+      num_bars = len(data)
+      # This list is the point on the y-axis where each
+      # Bar is centered. Here it will be [1, 2, 3...]
+      positions = range(1, num_bars+1)
+      plt.barh(positions, data, align='center')
+      # Set the label of each bar
+      plt.yticks(positions, labels)
+      plt.xlabel('Steps')
+      plt.ylabel('Day')
+      plt.title('Number of steps walked')
+      # Turns on the grid which may assist in visual estimation
+      plt.grid()
+      plt.show()
+
+  if __name__ == '__main__':
+      # Number of steps I walked during the past week
+      steps = [6534, 7000, 8900, 10786, 3467, 11045, 5095]
+      # Corresponding days
+      labels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+      create_bar_chart(steps, labels)
+#+end_src
+
+The ~create_bar_chart()~ function accepts two parameters—data, which is a list of numbers we want to represent using the bars and labels, and the corresponding labels list. The center of each bar has to be specified, and I've arbitrarily chosen the centers as 1, 2, 3, 4, and so on using the help of the ~range()~ function at.
+We then call the ~barh()~ function, passing positions and data as the first two arguments and then the keyword argument, align='center', at. The keyword argument specifies that the bars are centered at the positions on the y-axis specified by the list. We then set the labels for each bar, the axis labels, and the title using the ~yticks()~ function. We also call the ~grid()~ function to turn on the grid, which may be useful for a visual estimation of the number of steps. Finally, we call the ~show()~ function.
+
+#+begin_src python
+  import matplotlib.pyplot as plt
+
+  def create_bar_chart(data, labels):
+      # number of bars
+      num_bars = len(data)
+      # this list is the point on the y-axis where each
+      # bar is centered. Here it will be [1, 2, 3..]
+      positions = range(1, num_bars+1)
+      plt.barh(positions, data, align='center')
+      # set the label of each bar
+      plt.yticks(positions, labels)
+      plt.xlabel('Amount')
+      plt.ylabel('Categories')
+      plt.title('Weekly expenditures')
+      # Turns on the grid which may assist in visual estimation
+      plt.grid()
+      plt.show()
+
+  if __name__ == '__main__':
+      n = int(input('Enter the number of categories: '))
+      labels = []
+      expenditures = []
+      for i in range(n):
+          category = input('Enter category: ')
+          expenditure = float(input('Expenditure: '))
+          labels.append(category)
+          expenditures.append(expenditure)
+      create_bar_chart(expenditures, labels)
+#+end_src
+
+** Challenge 5 - Exploring the Relationship Between the Fibonacci Sequence and the Golden Ratio
+
+The Fibonacci sequence (1, 1, 2, 3, 5, . . .) is the series of numbers where the ith number in the series is the sum of the two previous numbers—that is, the numbers in the positions (i - 2) and (i - 1). The successive numbers in this series display an interesting relationship. As you increase the number of terms in the series, the ratios of consecutive pairs of numbers are nearly equal to each other. This value approaches a special number referred to as the golden ratio. Numerically, the golden ratio is the number 1.618033988 . . . , and it's been the subject of extensive study in music, architecture, and nature. For this challenge, write a program that will plot on a graph the ratio between consecutive Fibonacci numbers for, say, 100 numbers, which will demonstrate that the values approach the golden ratio.
+You may find the following function, which returns a list of the first n Fibonacci numbers, useful in implementing your solution:
+
+#+begin_src python
+  def fibo(n):
+      if n == 1:
+          return [1]
+      if n == 2:
+          return [1, 1] 
+      #n> 2
+      a= 1
+      b= 1
+      # First two members of the series 
+      series = [a, b]
+      for i in range(n):
+          c=a+ b 
+          series.append(c) 
+          a= b
+          b= c
+      return series
+#+end_src
+
+#+begin_src python
+  import sys
+  import matplotlib.pyplot as plt
+
+  def fibo(n):
+      if n == 1:
+          return [1]
+      if n == 2:
+          return [1, 1]
+      # n > 2
+      a = 1
+      b = 1
+      # first two members of the series
+      series = [a, b]
+      for i in range(n):
+          c = a + b
+          series.append(c)
+          a = b
+          b = c
+
+      return series
+
+  def plot_ratio(series):
+      ratios = []
+      for i in range(len(series)-1):
+          ratios.append(series[i+1]/series[i])
+      plt.plot(ratios)
+      plt.title('Ratio between Fibonacci numbers & Golden ratio')
+      plt.ylabel('Ratio')
+      plt.xlabel('No.')
+      plt.savefig(sys.stdout.buffer)
+      plt.show()
+
+  if __name__ == '__main__':
+      # Number of fibonacci numbers
+      num = 100
+      series = fibo(num)
+      plot_ratio(series)
+#+end_src
 
 * [[src/chapter 3/solutions.org][Chapter 3]]
 
-#+INCLUDE: "src/chapter 3/solutions.org" :lines "7-"
+** Challenge 1 - Better Correlation Coefficient–Finding Program
+
+The ~find_corr_x_y()~ function we wrote earlier to find the correlation coefficient between two sets of numbers assumes that the two sets of numbers are the same length. Improve the function so that it first checks the length of the lists. If they’re equal, only then should the function proceed with the remaining calculations; otherwise, it should print an error message that the correlation can’t be found.
+
+#+begin_src python
+  def find_corr_x_y(x,y):
+
+      if len(x) != len(y):
+          print('The two sets of numbers are of unequal size')
+          return None
+
+      n = len(x)
+
+      # find the sum of the products
+      prod = [xi*yi for xi, yi in zip(x, y)]
+      sum_prod_x_y = sum(prod)
+
+      # sum of the numbers in x
+      sum_x = sum(x)
+      # sum of the numbers in y
+      sum_y = sum(y)
+
+      # square of the sum of the numbers in x
+      squared_sum_x = sum_x**2
+      # square of the sum of the numbers in y
+      squared_sum_y = sum_y**2
+
+      # find the squares of numbers in x and the
+      # sum of the squares
+      x_square = [xi**2 for xi in x]
+      x_square_sum = sum(x_square)
+
+      # find the squares of numbers in y and the
+      # sum of the squares
+      y_square = [yi**2 for yi in y]
+      y_square_sum = sum(y_square)
+
+      # numerator
+      numerator = n*sum_prod_x_y - sum_x*sum_y
+      denominator_term1 = n*x_square_sum - squared_sum_x
+      denominator_term2 = n*y_square_sum - squared_sum_y
+      denominator = (denominator_term1*denominator_term2)**0.5
+
+      correlation = numerator/denominator
+
+      return correlation
+
+  def generate_data(m, n):
+      x = range(0, m)
+      y = [4*xi for xi in range(0, n)]
+      return x, y
+
+  if __name__=='__main__':
+      x, y = generate_data(10, 10)
+      corr = find_corr_x_y(x,y)
+      if not corr:
+          print('Correlation correlation could not be calculated')
+      else:
+          print('The correlation coefficient between x and y is {0}'.format(corr))
+
+      x, y = generate_data(10, 11)
+      corr = find_corr_x_y(x,y)
+      if not corr:
+          print('Correlation correlation could not be calculated')
+      else:
+          print('The correlation coefficient between x and y is {0}'.format(corr))
+#+end_src
+
+** Challenge 2 - Statistics Calculator
+
+Implement a statistics calculator that takes a list of numbers in the file /mydata.txt/ and then calculates and prints their mean, median, mode, variance, and standard deviation using the functions we wrote earlier in this chapter.
+
+#+begin_src python
+  from stats import mean, median, mode, variance_sd
+
+  def read_data(filename):
+      numbers = []
+      with open(filename) as f:
+          for line in f:
+              numbers.append(float(line))
+
+      return numbers
+
+  if __name__=='__main__':
+      data = read_data('mydata.txt')
+      m = mean(data)
+      median = median(data)
+      mode = mode(data)
+      variance, sd = variance_sd(data)
+      print('Mean: {0:.5f}'.format(m))
+      print('Median: {0:.5f}'.format(median))
+      print('Mode: {0:.5f}'.format(mode))
+      print('Variance: {0:.5f}'.format(variance))
+      print('Standard deviation: {0:.5f}'.format(sd))
+#+end_src
+
+** Challenge 3 - Experiment with Other CSV Data
+
+You can experiment with numerous interesting data sources freely available on the Internet. The website http://www.quandl.com/ is one such source. For this challenge, download the following data as a CVS file from http://www.quandl.com/WORLDBANK/USA_SP_POP_TOTL/: the total population of the United States at the end of each year for the years 1960 to 2012. Then, calculate the mean, median, variance, and standard deviation of the difference in population over the years and create a graph showing these differences.
+
+#+begin_src python
+  import matplotlib.pyplot as plt
+  import csv
+  from stats import mean, median, variance_sd
+
+  def read_csv(filename):
+
+      years = []
+      population = []
+
+      with open(filename) as f:
+          reader = csv.reader(f)
+          next(reader)
+
+          summer = []
+          highest_correlated = []
+          for row in reader:
+              # Extract only the year from
+              # date
+              year = row[0].split('-')[0]
+              years.append(year)
+              population.append(float(row[1]))
+      # reverse the lists sice the original data lists the
+      # most recent years first
+      population = population[::-1]
+      years = years[::-1]
+
+      return population, years
+
+  def plot_population(population, years):
+
+      plt.figure(1)
+      xaxis_positions = range(0, len(years))
+      plt.plot(population, 'r-')
+      plt.title('Total population in US')
+      plt.xlabel('Year')
+      plt.ylabel('Population')
+      plt.xticks(xaxis_positions, years, rotation=45)
+
+  def calculate_stats(population):
+
+      # find the growth in population in consecutive years
+      growth = []
+      for i in range(0, len(population)-1):
+          growth.append(population[i+1] - population[i])
+      print('Mean growth: {0:.5f}'.format(mean(growth)))
+      print('Median growth: {0:.5f}'.format(median(growth)))
+      print('Variance/Sd growth: {0:.5f}, {1:.5f}'.format(*variance_sd(growth)))
+      return growth
+
+  def plot_population_diff(growth, years):
+
+      xaxis_positions = range(0, len(years)-1)
+      xaxis_labels = ['{0}-{1}'.format(years[i], years[i+1])
+                      for i in range(len(years)-1)]
+      plt.figure(2)
+      plt.plot(growth, 'r-')
+      plt.title('Population Growth in consecutive years')
+      plt.ylabel('Population Growth')
+      plt.xticks(xaxis_positions, xaxis_labels, rotation=45)
+
+  if __name__ == '__main__':
+      population, years = read_csv('USA_SP_POP_TOTL.csv')
+      plot_population(population, years)
+      growth = calculate_stats(population)
+      plot_population_diff(growth, years)
+      plt.show()
+#+end_src
+
+** Challenge 4 - Finding the Percentile
+
+The percentile is a commonly used statistic that conveys the value below which a given percentage of observations falls. For example, if a student obtained a 95 percentile score on an exam, this means that 95 percent of the students scored less than or equal to the student’s score. For another example, in the list of numbers 5, 1, 9, 3, 14, 9, and 7, the 50th percentile is 7 and the 25th percentile is 3.5, a number that is not present in the list.
+
+There are a number of ways to find the observation corresponding to a given percentile, but here’s one approach.
+Let’s say we want to calculate the observation at percentile $p$:
+
+1. In ascending order, sort the given list of numbers, which we might call data.
+2. Calculate $i = \frac{np}{100} + 0.5$, where $n$ is the number of items in data.
+3. If ~i~ is an integer, data[i] is the number corresponding to percentile $p$.
+4. If /i/ is not an integer, set /k/ equal to the integral part of /i/ and /f/ equal to the fractional part of /i/. The number ~(1-f)*data[k] + f*data[k+1]~ is the number at percentile $p$.
+
+Using this approach, write a program that will take a set of numbers in a file and display the number that corresponds to a specific percentile supplied as an input to the program.
+
+#+begin_src python
+  def find_percentile_score(data, percentile):
+      if percentile < 0 or percentile > 100:
+          return None
+      data.sort()
+      if percentile == 0:
+          return data[0]
+      if percentile == 100:
+          return data[-1]
+      n = len(data)
+      i = ((n*percentile)/100) + 0.5
+
+      if i.is_integer():
+          real_idx = int(i-1)
+          return data[real_idx]
+      else:
+          k = int(i)
+          f = i - k
+          real_idx_1 = k - 1
+          real_idx_2 = k 
+          return (1-f)*data[real_idx_1] + f*data[real_idx_2]
+
+  def read_data(filename):
+      numbers = []
+      with open(filename) as f:
+          for line in f:
+              numbers.append(float(line))
+      return numbers
+
+  if __name__ == '__main__':
+      percentile = float(input('Enter the percentile score you want to calculate: '))
+      data = read_data('marks.txt')
+      percentile_score = find_percentile_score(data, percentile)
+      if percentile_score:
+          print('The score at {0} percentile: {1}'.format(percentile, percentile_score))
+      else:
+          print('Could not find the score corresponding to {0} percentile'.format(percentile))
+#+end_src
+
+** Challenge 5 - Creating a Grouped Frequency Table
+
+For this challenge, your task is to write a program that creates a grouped frequency table from a set of numbers. A grouped frequency table displays the frequency of data classified into different classes. For example, let’s consider the scores we discussed in “Creating a Frequency Table” on page 69: 7, 8, 9, 2, 10, 9, 9, 9, 9, 4, 5, 6, 1, 5, 6, 7, 8, 6, 1, and 10. A grouped frequency table would display this data as follows:
+
+| Grade | Frequency |
+|-------+-----------|
+|   1-6 |         6 |
+|  6-11 |        14 |
+
+The table classifies the grades into two classes: 1–6 (which includes 1 but not 6) and 6–11 (which includes 6 but not 11). It displays against them the number of grades that belong to each category. Determining the number of classes and the range of numbers in each class are two key steps involved in creating this table. In this example, I’ve demonstrated two classes with the range of numbers in each class equally divided between the two.
+Here’s one simple approach to creating classes, which assumes the number of classes can be arbitrarily chosen:
+
+#+begin_src python
+  def create_classes(numbers, n):
+      low = min(numbers)
+      high = max(numbers)
+
+      # Width of each class
+      width = (high - low)/n
+      classes = []
+      a = low
+      b = low + width
+      classes = []
+      while a < (high-width):
+          classes.append((a, b)) a= b
+          b = a + width
+      # The last class may be of a size that is less than width
+      classes.append((a, high+1))
+      return classes
+#+end_src
+
+The ~create_classes()~ function accepts two arguments: a list of numbers, ~numbers~, and ~n~, the number of classes to create. It’ll return a list of tuples with each tuple representing a class. For example, if it’s called with numbers 7, 8, 9, 2, 10, 9, 9, 9, 9, 4, 5, 6, 1, 5, 6, 7, 8, 6, 1, 10, and $n = 4$, it returns the following list: [(1, 3.25), (3.25, 5.5), (5.5, 7.75), (7.75, 11)]. Once you have the list, the next step is to go over each of the numbers and find out which of the returned classes it belongs to.
+Your challenge is to write a program to read a list of numbers from a file and then to print the grouped frequency table, making use of the ~create_classes()~ function.
+
+#+begin_src python
+  def create_classes(numbers, n):
+      low = min(numbers)
+      high = max(numbers)
+
+      # width of each class
+      width = (high - low)/n
+      classes = []
+      a = low
+      b = low + width
+      classes = []
+      while a < (high-width):
+          classes.append((a, b))
+          a = b
+          b = a + width
+      # The last class may be of size
+      # less than width
+      classes.append((a, high+1))
+      return classes
+
+  def classify(numbers, classes):
+      # Create a list with the same number of elements
+      # as the number of classes
+      count = [0]*len(classes)
+      for n in numbers:
+          for index, c in enumerate(classes):
+              if n >= c[0] and n < c[1]:
+                  count[index] += 1
+                  break
+      return count
+
+  def read_data(filename):
+      numbers = []
+      with open(filename) as f:
+          for line in f:
+              numbers.append(float(line))
+      return numbers
+
+  if __name__ == '__main__':
+
+      num_classes = int(input('Enter the number of classes: '))
+      numbers = read_data('marks.txt')
+
+      classes = create_classes(numbers, num_classes)
+      count = classify(numbers, classes)
+      for c, cnt in zip(classes, count):
+          print('{0:.2f} - {1:.2f} \t {2}'.format(c[0], c[1], cnt))
+#+end_src
 
 * [[src/chapter 4/solutions.org][Chapter 4]]
 
-#+INCLUDE: "src/chapter 4/solutions.org" :lines "7-"
+** Challenge 1 - Factor Finder
+
+You learned about the ~factor()~ function, which prints the factors of an expression. Now that you know how your program can handle expressions input by a user, write a program that will ask the user to input an expression, calculate its factors, and print them. Your program should be able to handle invalid input by making use of exception handling.
+
+#+begin_src python
+  from sympy import factor, sympify, SympifyError
+
+  def factorize(expr):
+      return factor(expr)
+
+  if __name__ == '__main__':
+      expr = input('Enter an expression to factorize: ')
+      try:
+          expr_obj = sympify(expr)
+      except SympifyError:
+          print('Invalid expression entered as input')
+      else:
+          print(factorize(expr_obj))
+#+end_src
+
+** Challenge 2 - Graphical Equation Solver
+
+Earlier, you learned how to write a program that prompts the user to input an expression such as $3x + 2y − 6$ and create the corresponding graph. Write a program that asks the user for two expressions and then graphs them both, as follows:
+
+#+begin_example
+  >>> expr1 = input('Enter your first expression in terms of x and y: ')
+  >>> expr2 = input('Enter your second expression in terms of x and y: ')
+#+end_example
+
+Now, ~expr1~ and ~expr2~ will store the two expressions input by the user. You should convert both of these into SymPy objects using the ~sympify()~ step in a ~try...except~ block.
+All you need to do from here is plot these two expressions instead of one.
+Once you’ve completed this, enhance your program to print the solution—the pair of $x$ and $y$ values that satisfies both equations. This will also be the spot where the two lines on the graph intersect. (Hint: Refer to how we used the ~solve()~ function earlier to find the solution of a system of two linear equations.)
+
+#+begin_src python
+  from sympy import Symbol, sympify, solve, SympifyError
+  from sympy.plotting import plot
+
+  def solve_plot_equations(eq1, eq2, x, y):
+      # Solve
+      solution = solve((eq1, eq2), dict=True)
+      if solution:
+          print('x: {0} y: {1}'.format(solution[0][x], solution[0][y]))
+      else:
+          print('No solution found')
+      # Plot
+      eq1_y = solve(eq1,'y')[0]
+      eq2_y = solve(eq2, 'y')[0]
+      plot(eq1_y, eq2_y, legend=True)
+
+
+
+  if __name__=='__main__':
+
+      eq1 = input('Enter your first equation : ')
+      eq2 = input('Enter your second equation: ')
+
+      try:
+          eq1 = sympify(eq1)
+          eq2 = sympify(eq2)
+      except SympifyError:
+          print('Invalid input')
+      else:
+          x = Symbol('x')
+          y = Symbol('y')
+          # check if the expressions consist of only two variables
+          eq1_symbols = eq1.atoms(Symbol)
+          eq2_symbols = eq2.atoms(Symbol)
+
+          if len(eq1_symbols)> 2 or len(eq2_symbols) > 2:
+              print('The equations must have only two variables - x and y')
+          elif x not in eq1_symbols or y not in eq1_symbols:
+              print('First equation must have only x and y variables')
+          elif x not in eq2_symbols or y not in eq2_symbols:
+              print('Second equation must have only x and y variables')       
+          else:
+              solve_plot_equations(eq1, eq2, x, y)
+#+end_src
+
+** Summing a Series
+
+We saw how to find the sum of a series in “Printing a Series” on page 99. There, we manually added the terms of the series by looping over all the terms. Here’s a snippet from that program:
+
+#+begin_src python
+  for i in range(2, n+1):
+      series = series + (x**i)/i
+#+end_src
+
+SymPy’s ~summation()~ function can be directly used to find such summations. The following example prints the sum of the first five terms of the series we considered earlier:
+
+#+begin_example
+  >>> from sympy import Symbol, summation, pprint
+  >>> x = Symbol('x')
+  >>> n = Symbol('n')
+  >>> s = summation(x**n/n, (n, 1, 5))
+  >>> pprint(s)
+  x⁵   x⁴   x³   x²
+  -- + -- + -- + -- + x
+  5    4    3    2
+#+end_example
+
+We call the ~summation()~ function at (1), with the first argument being the nth term of the series and the second argument being a tuple that states the range of n. We want the sum of the first five terms here, so the second argu- ment is (n, 1, 5).
+Once you have the sum, you can use the ~subs()~ method to substitute a value for $x$ to find the numerical value of the sum:
+
+#+begin_example
+  >>> s.subs({x:1.2})
+  3.51206400000000
+#+end_example
+
+Your challenge is to write a program that’s capable of finding the sum of an arbitrary series when you supply the nth term of the series and the number of terms in it. Here’s an example of how the program would work:
+
+#+begin_example
+  Enter the nth term: a+(n-1)*d
+  Enter the number of terms: 3
+  3·a + 3·d
+#+end_example
+
+In this example, the nth term supplied is that of an /arithmetic progression/. Starting with a and d as the /common difference/, the number of terms up
+to which the sum is to be calculated is 3. The sum turns out to be $3a + 3d$, which agrees with the known formula for the same.
+
+#+begin_src python
+  from sympy import summation, sympify, Symbol, pprint
+
+  def find_sum(n_term, num_terms):
+      n = Symbol('n')
+      s = summation(n_term, (n, 1, num_terms))
+      pprint(s)
+
+
+  if __name__ == '__main__':
+      n_term = sympify(input('Enter the nth term: '))
+      num_terms = int(input('Enter the number of terms: '))
+
+      find_sum(n_term, num_terms)      
+#+end_src
+
+** Challenge 4 - Solving Single-Variable Inequalities
+
+You’ve seen how to solve an equation using SymPy’s ~solve()~ function. But SymPy is also capable of solving single-variable inequalities, such as $x + 5 > 3$ and $sinx − 0.6 > 0$. That is, SymPy can solve relations besides equality, like >, <, and so on. For this challenge, create a function, ~isolve()~, that will take any inequality, solve it, and then return the solution.
+First, let’s learn about the SymPy functions that will help you implement this. The inequality-solving functions are available as three separate functions for polynomial, rational, and all other inequalities. We’ll need to pick the right function to solve various inequalities, or we’ll get an error.
+A /polynomial/ is an algebraic expression consisting of a variable and coefficients and involving only the operations of addition, subtraction, and multiplication and only positive powers of the variable. An example of a polynomial inequality is $x^2 + 4 < 0$.
+To solve a polynomial inequality, use the ~solve_poly_inequality()~ function:
+
+#+begin_example
+  >>> from sympy import Poly, Symbol, solve_poly_inequality
+  >>> x = Symbol('x')
+  >>> ineq_obj = -x**2 + 4 < 0
+  >>> lhs = ineq_obj.lhs
+  >>> p = Poly(lhs, x)
+  >>> rel = ineq_obj.rel_op
+  >>> solve_poly_inequality(p, rel)
+  [(-oo, -2), (2, oo)]
+#+end_example
+
+First, create the expression representing an inequality, $−x^2 + 4 < 0$, at (1) and refer to this expression with the label ~ineq_obj~. Then, extract the left side of the inequality—that is, the algebraic expression $−x^2 + 4$ —using the lhs attribute at (2). Next, create a Poly object at (3) to represent the polynomial we extracted at (2). The second argument passed when creating the object is the symbol object that represents the variable, x. At (4), extract the relational operator from the inequality object using the ~rel~ attribute. Finally, call the ~solve_poly_inequality()~ function with the polynomial object, ~p~, and ~rel~ as the two arguments. The program returns the solution as a list of tuples, with each tuple representing a solution for the inequality as the lower limit and the upper limit of the range of numbers. For this inequality, the solution is all numbers less than –2 and all numbers greater than 2.
+A /rational expression/ is an algebraic expression in which the numerator and denominator are both polynomials. Here’s an example of a rational inequality: $\frac{x - 1}{x + 2} > 0$ For rational inequalities, use the solve_rational_inequalities() function:
+
+#+begin_example
+  >>> from sympy import Symbol, Poly, solve_rational_inequalities
+  >>> x = Symbol('x')
+  >>> ineq_obj = ((x-1)/(x+2)) > 0
+  >>> lhs = ineq_obj.lhs
+  >>> numer, denom = lhs.as_numer_denom()
+  >>> p1 = Poly(numer)
+  >>> p2 = Poly(denom)
+  >>> rel = ineq_obj.rel_op
+  >>> solve_rational_inequalities([[((p1, p2), rel)]])
+  (-oo, -2) U (1, oo)
+#+end_example
+
+Create an inequality object representing our example rational inequality at (1) and then extract the rational expression using the lhs attribute. Separate out the numerator and the denominator into the labels numer and denom using the ~as_numer_denom()~ method at (2), which returns a tuple with the numerator and denominator as the two members. Then, create two polynomial objects, ~p1~ and ~p2~, representing the numerator and denominator, respectively. Retrieve the relational operator and call the ~solve_rational_inequalities()~ function, passing it the two polynomial objects— ~p1~ and ~p2~ —and the relational operator.
+The program returns the solution (-oo, -2) ~U~ (1, oo), where U denotes that the solution is a /union/ of the two sets of solutions consisting of all numbers less than −2 and all numbers greater than 1. (We’ll learn about sets in Chapter 5.)
+Finally, $sinx − 0.6 > 0$ is an example of an inequality that belongs to neither the polynomial nor rational expression categories. If you have such an inequality to solve, use the ~solve_univariate_inequality()~ function:
+
+#+begin_example
+  >>> from sympy import Symbol, solve, solve_univariate_inequality, sin
+  >>> x = Symbol('x')
+  >>> ineq_obj = sin(x) - 0.6 > 0
+  >>> solve_univariate_inequality(ineq_obj, x, relational=False) (0.643501108793284, 2.49809154479651)
+#+end_example
+
+Create an inequality object representing the inequality $sin(x) – 0.6 > 0$ and then call the ~solve_univariate_inequality()~ function with the first two arguments as the inequality object, ~ineq_obj~, and the symbol object, ~x~. The keyword argument ~relational=False~ specifies to the function that we want the solution to be returned as a /set/. The solution for this inequality turns out to be all numbers lying between the first and second members of the tuple the program returns.
+
+Now remember—your challenge is (1) to create a function, ~isolve()~, that will take any inequality and (2) to choose one of the appropriate functions discussed in this section to solve it and return the solution. The following hints may be useful to implement this function.
+The ~is_polynomial()~ method can be used to check whether an expression is a polynomial or not:
+
+#+begin_example
+  >>> x = Symbol('x')
+  >>> expr = x**2 - 4
+  >>> expr.is_polynomial()
+  True
+  >>> expr = 2*sin(x) + 3 >>> expr.is_polynomial()
+  False
+#+end_example
+
+The ~is_rational_function()~ can be used to check whether an expression is a rational expression:
+
+#+begin_example
+  >>> expr = (2+x)/(3+x)
+  >>> expr.is_rational_function()
+  True
+  >>> expr = 2+x
+  >>> expr.is_rational_function()
+  True
+  >>> expr = 2+sin(x)
+  >>> expr.is_rational_function()
+  False
+#+end_example
+
+The ~sympify()~ function can convert an inequality expressed as a string to an inequality object:
+
+#+begin_example
+  >>> from sympy import sympify >>> sympify('x+3>0')
+  x + 3 > 0
+#+end_example
+
+When you run your program, it should ask the user to input an inequality expression and print back the solution.
+
+#+begin_src python
+  from sympy import Symbol, sympify, SympifyError
+  from sympy import solve_poly_inequality, solve_rational_inequalities, solve_univariate_inequality, Poly
+  from sympy.core.relational import Relational, Equality
+
+  def isolve(ineq_obj):
+      x = Symbol('x')
+
+      expr = ineq_obj.lhs
+      rel = ineq_obj.rel_op
+
+      if expr.is_polynomial():
+          p = Poly(expr, x)
+          return solve_poly_inequality(p, rel)
+      elif expr.is_rational_function():
+          p1, p2 = expr.as_numer_denom()
+          num  = Poly(p1)
+          denom = Poly(p2)
+          return solve_rational_inequalities([[((num, denom), rel)]])
+      else:
+          return solve_univariate_inequality(ineq_obj , x, relational=False)
+
+  if __name__ == '__main__':
+      ineq = input('Enter the inequality to solve: ')
+      try:
+          ineq_obj = sympify(ineq)
+      except SympifyError:
+          print('Invalid inequality')
+      else:
+          # We check if the input expression is an inequality here
+          if isinstance(ineq_obj, Relational) and not isinstance(ineq_obj, Equality):
+              print(isolve(ineq_obj))
+          else:
+              print('Invalid inequality')
+#+end_src
 
 * [[src/chapter 5/solutions.org][Chapter 5]]
 
-#+INCLUDE: "src/chapter 5/solutions.org" :lines "7-"
+** Challenge 1 - Using Venn Diagrams to Visualize Relationships Between Sets
+
+A /Venn diagram/ is an easy way to see the relationship between sets graphically. It tells us how many elements are common between the two sets, how many elements are only in one set, and how many elements are in neither set. Consider a set, $A$, that represents the set of positive odd numbers less than 20—that is, $A = {1, 3, 5, 7, 9, 11, 13, 15, 17, 19}$ —and consider another set, $B$, that represents the set of prime numbers less than 20—that is,
+$B = {2, 3, 5, 7, 11, 13, 17, 19}$. We can draw Venn diagrams with Python using the ~matplotlib_venn~ package (see Appendix A for installation instructions for this package). Once you’ve installed it, you can draw the Venn diagram as follows:
+
+#+begin_src python
+  '''
+  Draw a Venn diagram for two sets
+  '''
+
+  from matplotlib_venn import venn2
+  import matplotlib.pyplot as plt
+  from sympy import FiniteSet
+
+  def draw_venn(sets):
+      venn2(subsets=sets)
+      plt.show()
+
+  if __name__ == '__main__':
+
+      s1 = FiniteSet(1, 3, 5, 7, 9, 11, 13, 15, 17, 19)
+      s2 = FiniteSet(2, 3, 5, 7, 11, 13, 17, 19)
+
+      draw_venn([s1, s2])
+#+end_src
+
+Once we import all the required modules and functions (the ~venn2()~ function, ~matplotlib.pyplot~, and the ~FiniteSet~ class), all we have to do is create the two sets and then call the ~venn2()~ function, using the subsets keyword argument to specify the sets as a tuple.
+Figure 5-4 shows the Venn diagram created by the preceding program. The sets $A$ and $B$ share seven common elements, so 7 is written in the com- mon area. Each of the sets also has unique elements, so the number of unique elements—3 and 1, respectively—is written in the individual areas. The labels below the two sets are shown as $A$ and $B$. You can specify your own labels using the ~set_labels~ keyword argument:
+
+#+begin_example
+  >>> venn2(subsets=(a,b), set_labels=('S', 'T'))
+#+end_example
+
+This would change the set labels to S and T.
+
+For your challenge, imagine you’ve created an online questionnaire asking your classmates the following question: /Do you play football, another sport, or no sports?/ Once you have the results, create a CSV file, /sports.csv/, as follows:
+
+#+begin_example
+  StudentID,Football,Others
+  1,1,0
+  2,1,1
+  3,0,1
+  --snip--
+#+end_example
+
+Create 20 such rows for the 20 students in your class. The first column is the student ID (the survey isn’t anonymous), the second column has a 1 if the student has marked “football” as the sport they love to play, and the third column has a 1 if the student plays any other sport or none at all. Write a program to create a Venn diagram to depict the summarized results of the survey, as shown in Figure 5-5.
+
+Depending on the data in the sports.csv file you created, the numbers in each set will vary. The following function reads a CSV file and returns two lists corresponding to the IDs of those students who play football and other sports:
+
+#+begin_src python
+  def read_csv(filename):
+      football = []
+      others = []
+      with open(filename) as f:
+          reader = csv.reader(f)
+          next(reader)
+          for row in reader:
+              if row[1] == '1':
+                  football.append(row[0])
+              if row[2] == '1':
+                  others.append(row[0])
+
+      return football, others
+#+end_src
+
+#+begin_src python
+  from sympy import FiniteSet
+  from matplotlib_venn import venn2
+  import matplotlib.pyplot as plt
+  import csv
+
+  def read_csv(filename):
+
+      football = []
+      others = []
+
+      with open(filename) as f:
+          reader = csv.reader(f)
+          next(reader)
+          for row in reader:
+              if row[1] == '1':
+                  football.append(row[0])
+              if row[2] == '1':
+                  others.append(row[0])
+
+      return football, others
+
+
+  def draw_venn(f, o):
+      venn2(subsets=(f, o), set_labels=('Football', 'Others'))
+      plt.show()
+
+  if __name__ == '__main__':
+      football, others = read_csv('sports.csv')
+      f = FiniteSet(*football)
+      o = FiniteSet(*others)
+      draw_venn(f, o)
+#+end_src
+
+** Challenge 2 - Law of Large Numbers
+
+We’ve referred to a die roll and coin toss as two examples of random events that we can simulate using random numbers. We’ve used the term /event/ to refer to a certain number showing up on a die roll or to heads or tails showing up on a coin toss, with each event having an associated probability value. In probability, a /random variable/ — usually denoted by X—describes an event. For example, $X = 1$ describes the event of 1 appearing upon a die roll, and $P(X = 1)$ describes the associated probability. There are two kinds of random variables: (1) /discrete/ random variables, which take only integral values and are the only kind of random variables we see in this chapter, and (2) /continuous/ random variables, which—as the name suggests—can take any real value.
+The /expectation/, /E/, of a discrete random variable is the equivalent of the average or mean that we learned about in Chapter 3. The expectation can be calculated as follows: $E = x_1 P(x_1) + x_2 P(x_2) + x_3 P(x_3) + \dotsb + x_n P(x_n)$
+Thus, for a six-sided die, the expected value of a die roll can be calculated
+like this:
+
+#+begin_example
+  >>> e = 1*(1/6) + 2*(1/6) + 3*(1/6) + 4*(1/6) + 5*(1/6) + 6*(1/6)
+  >>> e
+  3.5
+#+end_example
+
+According to the /law of large numbers/, the average value of results over multiple trials approaches the expected value as the number of trials increases. Your challenge in this task is to verify this law when rolling a six-sided die for the following number of trials: 100, 1000, 10000, 100000, and 500000. Here’s an expected sample run of your complete program:
+
+#+begin_example
+  Expected value: 3.5
+  Trials: 100 Trial average 3.39
+  Trials: 1000 Trial average 3.576
+  Trials: 10000 Trial average 3.5054
+  Trials: 100000 Trial average 3.50201
+  Trials: 500000 Trial average 3.495568
+#+end_example
+
+#+begin_src python
+  import random
+
+  def roll(num_trials):
+      rolls = []
+      for t in range(num_trials):
+          rolls.append(random.randint(1, 6))
+      return sum(rolls)/num_trials
+
+  if __name__ == '__main__':
+      expected_value = 3.5
+      print('Expected value: {0}'.format(expected_value))
+      for trial in [100, 1000, 10000, 100000, 500000]:
+          avg = roll(trial)
+          print('Trials: {0} Trial average {1}'.format(trial, avg))
+#+end_src
+
+** Challenge 3 - How Many Tosses Before You Run Out of Money?
+
+Let’s consider a simple game played with a fair coin toss. A player wins $1 for heads and loses $1.50 for tails. The game is over when the player’s balance reaches $0. Given a certain starting amount specified by the user as input, your challenge is to write a program that simulates this game. Assume there’s an unlimited cash reserve with the computer—your opponent here. Here’s a possible game play session:
+
+#+begin_example
+  Enter your starting amount: 10
+  Tails! Current amount: 8.5
+  Tails! Current amount: 7.0
+  Tails! Current amount: 5.5
+  Tails! Current amount: 4.0
+  Tails! Current amount: 2.5
+  Heads! Current amount: 3.5
+  Tails! Current amount: 2.0
+  Tails! Current amount: 0.5
+  Tails! Current amount: -1.0
+  Game over :( Current amount: -1.0. Coin tosses: 9
+#+end_example
+
+#+begin_src python
+  import random
+
+  def play(start_amount):
+
+      win_amount = 1
+      loss_amount = 1.5
+
+      cur_amount = start_amount
+      tosses = 0
+
+      while cur_amount > 0:
+          tosses += 1
+          toss = random.randint(0, 1)
+          if toss == 0:
+              cur_amount += win_amount
+              print('Heads! Current amount: {0}'.format(cur_amount))
+          else:
+              cur_amount -= loss_amount
+              print('Tails! Current amount: {0}'.format(cur_amount))
+      print('Game over :( Current amount: {0}. Coin tosses: {1}'.format(cur_amount, tosses))
+
+  if __name__ == '__main__':
+      start_amount = float(input('Enter your starting amount: '))
+      play(start_amount)
+#+end_src
+
+** Chapter 4 - Shuffling a Deck of Cards
+
+Consider a standard deck of 52 playing cards. Your challenge here is to write a program to simulate the shuffling of this deck. To keep the implementation simple, I suggest you use the integers 1, 2, 3, . . . , 52 to represent the deck. Every time you run the program, it should output a shuffled deck—in this case, a shuffled list of integers.
+Here’s a possible output of your program:
+
+#+begin_example
+  [3, 9, 21, 50, 32, 4, 20, 52, 7, 13, 41, 25, 49, 36, 23, 45, 1, 22, 40, 19, 2,
+  35, 28, 30, 39, 44, 29, 38, 48, 16, 15, 18, 46, 31, 14, 33, 10, 6, 24, 5, 43,
+  47, 11, 34, 37, 27, 8, 17, 51, 12, 42, 26]
+#+end_example
+
+The random module in Python’s standard library has a function, ~shuffle()~, for this exact operation:
+
+#+begin_example
+  >>> import random
+  >>> x = [1, 2, 3, 4]
+  >>> random.shuffle(x)
+  >>> x
+  [4, 2, 1, 3]
+#+end_example
+
+Create a list, x, consisting of the numbers ~[1, 2, 3, 4]~. Then, call the ~shuffle()~ function (1), passing this list as an argument. You’ll see that the numbers in x have been shuffled. Note that the list is shuffled “in place.” That is, the original order is lost.
+But what if you wanted to use this program in a card game? There, it’s not enough to simply output the shuffled list of integers. You’ll also need a way to map back the integers to the specific suit and rank of each card. One way you might do this is to create a Python class to represent a single card:
+
+#+begin_src python
+  class Card:
+      def __init__(self, suit, rank):
+          self.suit = suit
+          self.rank = rank
+#+end_src
+
+To represent the ace of clubs, create a card object, ~card1 = Card('clubs', 'ace')~. Then, do the same for all the other cards. Next, create a list consisting of each of the card objects and shuffle this list. The result will be a shuffled deck of cards where you also know the suit and rank of each card. Output of the program should look something like this:
+
+#+begin_example
+  10 of spades
+  6 of clubs
+  jack of spades
+  9 of spades
+#+end_example
+
+#+begin_src python
+  import random
+
+  class Card:
+      def __init__(self, suite, rank):
+          self.suite = suite
+          self.rank = rank
+
+  def initialize_deck():
+      suites = ['Clubs', 'Diamonds', 'Hearts', 'Spades']
+      ranks = ['Ace', '2', '3','4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King']
+      cards = []
+      for suite in suites:
+          for rank in ranks:
+              card = Card(suite, rank)
+              cards.append(card)
+      return cards
+
+  def shuffle_and_print(cards):
+      random.shuffle(cards)
+      for card in cards:
+          print('{0} of {1}'.format(card.rank, card.suite))
+
+  if __name__ == '__main__':
+      cards = initialize_deck()
+      shuffle_and_print(cards)
+#+end_src
+
+** Challenge 5 - Estimating the Area of a Circle
+
+Consider a dartboard with a circle of radius r inscribed in a square with side $2r$. Now let’s say you start throwing a large number of darts at it. Some of these will hit the board within the circle—let’s say, N—and others outside it—let’s say, M. If we consider the fraction of darts that land inside the circle, $f = \frac{N}{N+M}$ then the value of $f × A$, where $A$ is the area of the square, would roughly be equal to the area of the circle (see Figure 5-6). The darts are represented by the small circular dots in the figure. We shall refer to the value of $f × A$ as the estimated area. The actual area is, of course, $πr^2$.
+As part of this challenge, write a program that will find the estimated area of a circle, given any radius, using this approach. The program should print the estimated area of the circle for three different values of the number of darts: $10^3, 10^5, and 10^6$. That’s a lot of darts! You’ll see that increasing the number of darts brings the estimated area close to the actual area. Here’s a sample output of the completed solution:
+
+#+begin_example
+  Radius: 2
+  Area: 12.566370614359172, Estimated (1000 darts): 12.576
+  Area: 12.566370614359172, Estimated (100000 darts): 12.58176
+  Area: 12.566370614359172, Estimated (1000000 darts): 12.560128
+#+end_example
+
+The dart throw can be simulated by a call to the ~random.uniform(a, b)~ function, which will return a random number between $a$ and $b$. In this case, use the values $a = 0, b = 2r$ (the side of the square).
+
+*** Estimating the Value of Pi
+
+Consider Figure 5-6 once again. The area of the square is $4r^2$, and the area of the inscribed circle is $πr^2$. If we divide the area of the circle by the area of the square, we get $π/4$. The fraction f that we calculated earlier, $f = \frac{N}{N + M}$ is thus an approximation of π/4, which in turn means that the value of $4 \frac{N}{N + M}$ should be close to the value of $π$. Your next challenge is to write a program that will estimate the value of $π$ assuming any value for the radius. As you increase the number of darts, the estimated value of $π$ should get close to the known value of the constant.
+
+#+begin_src python
+  import math
+  import random
+
+  def estimate(radius, total_points):
+      center = (radius, radius)
+
+      in_circle = 0
+      for i in range(total_points):
+          x = random.uniform(0, 2*radius)
+          y = random.uniform(0, 2*radius)
+          p = (x, y)
+          # distance of the point created from circle's center
+          d = math.sqrt((p[0]-center[0])**2 + (p[1]-center[1])**2)
+          if d <= radius:
+              in_circle += 1
+      area_of_square = (2*radius)**2
+      return (in_circle/total_points)*area_of_square
+
+  if __name__ == '__main__':
+      radius = float(input('Radius: '))
+      area_of_circle = math.pi*radius**2
+      for points in [10**3, 10**5, 10**6]:
+          print('Area: {0}, Estimated ({1}): {2}'.format(area_of_circle, points, estimate(radius, points)))
+#+end_src
 
 * [[src/chapter 6/solutions.org][Chapter 6]]
 
-#+INCLUDE: "src/chapter 6/solutions.org" :lines "7-"
+** Challenge 1 - Packing Circles into a Square
+
+I mentioned earlier that ~matplotlib~ supports the creation of other geometric shapes. The ~Polygon~ patch is especially interesting, as it allows you to draw polygons with different numbers of sides. Here’s how we can draw a square (each side of length 4):
+
+#+begin_src python
+  '''
+  Draw a square
+  '''
+
+  from matplotlib import pyplot as plt
+
+  def draw_square():
+      ax = plt.axes(xlim = (0, 6), ylim = (0, 6))
+      square = plt.Polygon([(1, 1), (5, 1), (5, 5), (1, 5)], closed = True)
+      ax.add_patch(square)
+      plt.show()
+
+  if __name__ == '__main__':
+      draw_square()
+#+end_src
+
+The ~Polygon~ object is created by passing the list of the vertices’ coordi- nates as the first argument. Because we’re drawing a square, we pass the coordinates of the four vertices: (1, 1), (5, 1), (5, 5), and (1, 5). Passing closed=True tells matplotlib that we want to draw a closed polygon, where the starting and the ending vertices are the same.
+In this challenge, you’ll attempt a very simplified version of the “circles packed into a square” problem. How many circles of radius 0.5 will fit in the square produced by this code? Draw and find out! Figure 6-11 shows how the final image will look.
+The trick here is to start from the lower-left corner of the square— that is, (1, 1)—and then continue adding circles until the entire square is filled. The following snippet shows how you can create the circles and add them to the figure:
+
+#+begin_src python
+  y = 1.5
+  while y < 5:
+      x = 1.5
+      while x < 5:
+          c = draw_circle(x, y)
+          ax.add_patch(c)
+          x += 1.0
+      y += 1.0
+#+end_src
+
+A point worth noting here is that this is not the most optimal or, for that matter, the only way to pack circles into a square, and finding different ways of solving this problem is popular among mathematics enthusiasts.
+
+#+begin_src python
+  from matplotlib import pyplot as plt
+
+  def draw_square():
+      square = plt.Polygon([(1, 1), (5, 1), (5, 5), (1, 5)], closed=True)
+      return square
+
+  def draw_circle(x, y):
+      circle = plt.Circle((x, y), radius=0.5, fc='y')
+      return circle
+
+  if __name__ == '__main__':
+
+      ax = plt.gca()
+      s = draw_square()
+      ax.add_patch(s)
+      y = 1.5
+      while y < 5:
+          x = 1.5
+          while x < 5:
+              c = draw_circle(x, y)
+              ax.add_patch(c)
+
+              x += 1.0
+          y += 1.0
+
+      plt.axis('scaled') 
+      plt.show()
+#+end_src
+
+** Challenge 2 - Drawing the Sierpiński Triangle
+
+The Sierpiński triangle, named after the Polish mathematician Wacław Sierpiński, is a fractal that is an equilateral triangle composed of smaller equilateral triangles embedded inside it. Figure 6-12 shows a Sierpiński triangle composed of 10,000 points.
+
+The interesting thing here is that the same process that we used to draw a fern will also draw the Sierpiński triangle—only the transformation rules and their probability will change. Here’s how you can draw the Sierpiński triangle: start with the point (0, 0) and apply one of the follow- ing transformations:
+
+*Transformation 1:*
+
+$x_n+1 = 0.5x_n$
+
+$y_n+1 = 0.5y_n$
+
+
+*Transformation 2:*
+
+$x_n+1 = 0.5x_n + 0.5$
+
+$y_n+1 = 0.5y_n + 0.5$
+
+*Transformation 3:*
+
+$x_n+1 = 0.5x_n + 1$
+
+$y_n+1 = 0.5y_n$
+
+Each of the transformations has an equal probability of being selected—1/3. Your challenge here is to write a program that draws the Sierpiński triangle composed of a certain number of points specified as input.
+
+#+begin_src python
+  import random
+  import matplotlib.pyplot as plt
+
+  def transformation_1(p):
+      x = p[0]
+      y = p[1]
+      x1 = 0.5*x
+      y1 = 0.5*y
+      return x1, y1
+
+  def transformation_2(p):
+      x = p[0]
+      y = p[1]
+      x1 = 0.5*x + 0.5
+      y1 = 0.5*y + 0.5
+      return x1, y1
+
+  def transformation_3(p):
+      x = p[0]
+      y = p[1]
+      x1 = 0.5*x + 1
+      y1 = 0.5*y
+      return x1, y1
+
+  def get_index(probability):
+      r = random.random()
+      c_probability = 0
+      sum_probability = []
+      for p in probability:
+          c_probability += p
+          sum_probability.append(c_probability)
+      for item, sp in enumerate(sum_probability):
+          if r <= sp:
+              return item
+      return len(probability)-1
+
+  def transform(p):
+      # list of transformation functions
+      transformations = [transformation_1, transformation_2, transformation_3]
+      probability = [1/3, 1/3, 1/3]
+      # pick a random transformation function and call it
+      tindex = get_index(probability)
+      t = transformations[tindex]
+      x, y = t(p)
+      return x, y
+
+  def draw_sierpinski(n):
+      # We start with (0, 0)
+      x = [0]
+      y = [0]
+
+      x1, y1 = 0, 0
+      for i in range(n):
+         x1, y1 = transform((x1, y1))
+         x.append(x1)
+         y.append(y1)
+      return x, y
+
+  if __name__ == '__main__':
+      n = int(input('Enter the desired number of points in the Sierpinski Triangle: '))
+      x, y = draw_sierpinski(n)
+      # Plot the points
+      plt.plot(x, y, 'o')
+      plt.title('Sierpinski with {0} points'.format(n))
+      plt.show()
+#+end_src
+
+** Challenge 3 - Exploring Hénon’s Function
+
+In 1976, Michel Hénon introduced the Hénon function, which describes a transformation rule for a point $P(x, y)$ as follows: $P(x,y) → Q(y + 1 - 1.4x^2, 0.3x)$
+Irrespective of the initial point (provided it’s not very far from the origin), you’ll see that as you create more points, they start lying along curved lines, as shown in Figure 6-13.
+Your challenge here is to write a program to create a graph showing 20,000 iterations of this transformation, starting with the point (1, 1).
+Extra credit for writing another program to create an animated figure showing the points starting to lie along the curves! See https://www.youtube.com/watch?v=76ll818RlpQ for an example.
+This is an example of a dynamical system, and the curved lines that all the points seem attracted to are referred to as /attractors/. To learn more about this function, dynamical systems, and fractals in general, you may want to refer to Fractals: /A Very Short Introduction by Kenneth Falconer (Oxford University Press, 2013)/.
+
+#+begin_src python
+  import matplotlib.pyplot as plt
+  from matplotlib import animation
+
+  def transform(p):
+      x,y  = p
+      x1 = y + 1.0 - 1.4*x**2
+      y1 = 0.3*x
+
+      return x1, y1
+
+  def update_points(i, x, y, plot):
+      plot.set_data(x[:i], y[:i])
+      return plot,
+
+  if __name__ == '__main__':
+      p = (0, 0)
+      x = [p[0]]
+      y = [p[1]]
+      for i in range(10000):
+          p = transform(p)
+          x.append(p[0])
+          y.append(p[1])
+
+      fig = plt.gcf()
+      ax = plt.axes(xlim = (min(x), max(x)),
+                    ylim = (min(y), max(y)))
+      plot = plt.plot([], [], 'o')[0]
+      anim = animation.FuncAnimation(fig, update_points,
+                                     fargs=(x, y, plot),
+                                     frames = len(x),
+                                     interval = 25)
+      plt.title('Henon Function Animation')
+      plt.show()
+#+end_src
+
+** Challenge 4 - Drawing the Mandelbrot Set
+
+Your challenge here is to write a program to draw the /Mandelbrot set/ — another example of the application of simple rules leading to a complicated-looking shape (see Figure 6-14). Before I lay down the steps to do that, however, we’ll first learn about matplotlib’s ~imshow()~ function.
+
+*** The imshow() Function
+
+The ~imshow()~ function is usually used to display an external image, such as a JPEG or PNG image. You can see an example at http://matplotlib.org/users/image_tutorial.html. Here, however, we’ll use the function to draw a new image of our own creation via matplotlib.
+Consider the part of the Cartesian plane where $x$ and $y$ both range from 0 to 5. Now, consider six equidistant points along each axis: (0, 1,
+2, 3, 4, 5) along the x-axis and the same set of points along the y-axis. If we take the Cartesian product of these points, we get 36 equally spaced points in the x-y plane with the coordinates (0, 0), (0, 1) . . . (0, 5), (1, 0), (1, 1) . . . (1, 5) . . . (5, 5). Let’s now say that we want to color each of these points with a shade of gray—that is, some of these points will be black, some will be white, and others will be colored with a shade in between, randomly chosen. Figure 6-15 illustrates the scenario.
+To create this figure, we have to make a list of six lists. Each of these six lists will in turn consist of six integers ranging from 0 to 10. Each number will correspond to the color for each point, 0 standing for black and 10 standing for white. We’ll then pass this list to the ~imshow()~ function along with other necessary arguments.
+
+*** Creating a List of Lists
+
+A list can also contain lists as its members:
+
+#+begin_example
+  >>> l1 = [1, 2, 3]
+  >>> l2 = [4, 5, 6]
+  >>> l = [l1, l2]
+#+end_example
+
+Here, we created a list, $l$, consisting of two lists, $l1$ and $l2$. The first element of the list, $l[0]$, is thus the same as the $l1$ list and the second element of the list, $l[1]$, is the same as the $l2$ list:
+
+#+begin_example
+  >>> l[0]
+  [1, 2, 3]
+  >>> l[1]
+  [4, 5, 6]
+#+end_example
+
+To refer to an individual element within one of the member lists, we have to specify two indices— $l[0][1]$ refers to the second element of the first list, $l[1][2]$ refers to the third element of the second list, and so on.
+Now that we know how to work with a list of lists, we can write the program to create a figure similar to Figure 6-15:
+
+#+begin_src python
+  import matplotlib.pyplot as plt
+  import matplotlib.cm as cm
+  import random
+
+  def initialize_image(x_p, y_p): 
+      image = []
+      for i in range(y_p):
+         x_colors = []
+          for j in range(x_p):
+              x_colors.append(0)
+          image.append(x_colors)
+      return image
+
+  def color_points():
+      x_p = 6
+      y_p = 6
+      image = initialize_image(x_p, y_p)
+      for i in range(y_p):
+          for j in range(x_o):
+              image[i][j] = random.randint(0, 10)
+      plt.imshow(image, origin='lower', extent=(0, 5, 0, 5),
+                 cmap=cm.Greys_r, interpolation='nearest')
+      plt.colorbar()
+      plt.show()
+
+  if __name__ == '__main__':
+      color_points()
+#+end_src
+
+The ~initialize_image()~ function at (1) creates a list of lists with each of the elements initialized to 0. It accepts two arguments, ~x_p~ and ~y_p~, which correspond to the number of points along the $x-axis$ and $y-axis$, respectively. This effectively means that the initialized list image will consist of ~x_p~ lists with each list containing ~y_p~ zeros.
+
+In the ~color_points()~ function, once you have the image list back from ~initialize_image()~, assign a random integer between 0 and 10 to the element ~image[i][j]~ at (2). When we assign this random integer to the element, we are assigning a color to the point in the Cartesian plane that’s i steps along the $y-axis$ and /j/ steps along the $x-axis$ from the origin. It’s important to note that the ~imshow()~ function automatically deduces the color of a point from its position in the image list and doesn’t care about its specific /x/- and /y/-coordinates.
+
+Then, call the ~imshow()~ function at (3), passing image as the first argument. The keyword argument ~origin='lower'~ specifies that the number in ~image[0][0]~ corresponds to the color of the point (0, 0). The keyword argument ~extent=(0, 5, 0, 5)~ sets the lower-left and upper-right corners of the image to (0, 0) and (5, 5), respectively. The keyword argument ~cmap=cm.Greys_r~ specifies that we’re going to create a grayscale image.
+
+The last keyword argument, ~interpolation='nearest'~, specifies that matplotlib should color a point for which the color wasn’t specified with the same color as the one nearest to it. What does this mean? Note that we consider and specify the color for only 36 points in the region (0, 5) and (5, 5). Because there is an infinite number of points in this region, we tell matplotlib to set the color of an unspecified point to that of its nearest point. This is the reason you see color “boxes” around each point in the figure.
+
+Call the ~colorbar()~ function to display a color bar in the figure showing which integer corresponds to which color. Finally, call ~show()~ to display the image. Note that due to the use of the ~random.randint()~ function, your image will be colored differently than the one in Figure 6-15.
+
+If you increase the number of points along each axis by setting ~x_p~ and ~y_p~ to, let’s say, 20 in ~color_points()~, you’ll see a figure similar to the one shown in Figure 6-16. Note that the color boxes grow smaller in size. If you increase the number of points even more, you’ll see the size of the boxes shrink further, giving the illusion that each point has a different color.
+
+*** Drawing the Mandelbrot Set
+
+We’ll consider the area of the $x-y$ plane between (−2.5, −1.0) and (1.0, 1.0) and divide each axis into 400 equally spaced points. The Cartesian product of these points will give us 1,600 equally spaced points in this region. We’ll refer to these points as $(x_1, y_1), (x_1, y_2) . . . (x_400, y_400)$.
+Create a list, ~image~, by calling the ~initialize_image()~ function we saw earlier with both ~x_p~ and ~y_p~ set to 400. Then, follow these steps for each of the generated points $(x_i, y_k)$:
+
+1. First, create two complex numbers, $z_1 = 0 + 0j$ and $c = x_i + y_{k}j$. (Recall that we use /j/ for $\sqrt{-1}$)
+2. Create a label iteration and set it to 0—that is, ~iteration=0~.
+3. Create a complex number, $z_1 = z_{1}^2 + c$.
+4. Increment the value stored in ~iteration~ by 1—that is, ~iteration = iteration + 1~.
+5. If $abs(z1) < 2$ and $iteration < max_iteration$, then go back to step 3; otherwise, go to step 6. The larger the value of ~max_iteration~, the more detailed the image, but the longer it’ll take to create the image. Set ~max_iteration~ to 1,000 here.
+6. Set the color of the point $(x_p y_k) to the value in ~iteration~ - that is ~image[k][i] = iteration~
+
+Once you have the complete image list, call the ~imshow()~ function with
+the extent keyword argument changed to indicate the region bounded by (−2.5, −1.0) and (1.0, 1.0).
+
+This algorithm is usually referred to as the ~escape-time algorithm~. When the maximum number of iterations is reached before a point’s magnitude exceeds 2, that point belongs to the Mandelbrot set and is colored white. The points that exceed the magnitude within fewer iterations are said to “escape”; they don’t belong to the Mandelbrot set and are colored black. You can experiment by decreasing and increasing the number of points along each axis. Decreasing the number of points will lead to a grainy image, while increasing them will result in a more detailed image.
+
+#+begin_src python
+  import matplotlib.pyplot as plt
+  import matplotlib.cm as cm
+
+  # Subset of the complex plane we are considering
+  x0, x1 = -2.5, 1
+  y0, y1 = -1, 1
+
+  def initialize_image(x_p, y_p):
+      image = []
+      for i in range(y_p):
+          x_colors = []
+          for j in range(x_p):
+              x_colors.append(0)
+          image.append(x_colors)
+      return image
+
+  def mandelbrot_set():
+      # Number of divisions along each axis
+      n = 400
+      # Maximum iterations
+      max_iteration=1000
+
+      image = initialize_image(n, n)
+
+      # Generate a set of equally spaced points in the region
+      # above
+      dx = (x1-x0)/(n-1)
+      dy = (y1-y0)/(n-1)
+      x_coords = [x0 + i*dx for i in range(n)]
+      y_coords = [y0 + i*dy for i in range(n)]
+
+      for i, x in enumerate(x_coords):
+          for k, y in enumerate(y_coords):
+              z1 = complex(0, 0)
+              iteration = 0
+              c = complex(x, y)
+              while (abs(z1) < 2  and iteration < max_iteration):
+                  z1 = z1**2 + c
+                  iteration += 1
+              image[k][i] = iteration
+      return image
+
+  if __name__ == '__main__':
+      image = mandelbrot_set()
+      plt.imshow(image, origin='lower', extent=(x0, x1, y0,y1),
+                 cmap=cm.Greys_r, interpolation='nearest')
+      plt.show()
+#+end_src
 
 * [[src/chapter 7/solutions.org][Chapter 7]]
 
-#+INCLUDE: "src/chapter 7/solutions.org" :lines "7-"
+** Challenge 1 - Verify the Continuity of a Function at a Point
+
+A necessary, but not sufficient, condition for a function to be differen- tiable at a point is that it must be continuous at that point. That is, the function must be defined at that point and its left-hand limit and right-hand limit must exist and be equal to the value of the function at that point. If $f(x)$ is the function and $x = a$ is the point we are interested in evaluating, this is mathematically stated as $\lim _{x \to a^+}f(x)=\lim _{x \to a^-}f(x)=f(x)$
+
+Your challenge here is to write a program that will (1) accept a single- variable function and a value of that variable as inputs and (2) check whether the input function is continuous at the point where the variable assumes the value input.
+
+Here is a sample working of the completed solution:
+
+#+begin_example
+  Enter a function in one variable: 1/x
+  Enter the variable: x
+  Enter the point to check the continuity at: 1 
+  1/x is continuous at 1.0
+#+end_example
+
+The function 1/x is discontinuous at 0, so let’s check that:
+
+#+begin_example
+  Enter a function in one variable: 1/x
+  Enter the variable: x
+  Enter the point to check the continuity at: 0 
+  1/x is not continuous at 0.0
+#+end_example
+
+#+begin_src python
+  from sympy import Limit, Symbol, sympify, SympifyError
+
+  def check_continuity(f, var, a):
+      l1 = Limit(f, var, a, dir='+').doit()
+      l2 = Limit(f, var, a, dir='-').doit()
+      f_val = f.subs({var:a})
+
+      if l1 == l2 and f_val == l1:
+          print('{0} is continuous at {1}'.format(f, a))
+      else:
+          print('{0} is not continuous at {1}'.format(f, a))
+
+  if __name__ == '__main__':
+      f = input('Enter a function in one variable: ')
+      var = input('Enter the variable: ')
+      a = float(input('Enter the point to check the continuity at: '))
+      try:
+          f = sympify(f)
+      except SympifyError:
+          print('Invalid function entered')
+      else:
+          var = Symbol(var)
+          d = check_continuity(f, var, a)
+#+end_src
+
+** Challenge 2 - Implement the Gradient Descent
+
+The gradient descent method is used to find the minimum value of a function. Similar to the gradient ascent method, the gradient descent method is an iterative method: we start with an initial value of the variable and gradu- ally get closer to the variable value that corresponds to the minimum value of the function. The step that gets us closer is the equation $x_{new} = x_{old} - \lambda \frac{df}{dx}$, where λ is the step size and $\frac{df}{dx}$ is the result of differentiating the function. Thus, the only difference from the gradient ascent method is how we obtain the value of ~x_new~ from ~x_old~.
+
+Your challenge is to implement a generic program using the gradient descent algorithm to find the minimum value of a single-variable function specified as input by the user. The program should also create a graph of the function and show all the intermediate values it found before find- ing the minimum. (You may want to refer to Figure 7-5 on page 193.)
+
+#+begin_src python
+  from sympy import Derivative, Symbol, sympify, solve
+  import matplotlib.pyplot as plt
+
+  def grad_descent(x0, f1x, x):
+      # check if f1x=0 has a solution
+      if not solve(f1x):
+          print('Cannot continue, solution for {0}=0 does not exist'.format(f1x))
+          return None
+      epsilon =  1e-6
+      step_size = 1e-4
+      x_old = x0
+      x_new = x_old - step_size*f1x.subs({x:x_old}).evalf()
+
+      # list to store the X values traversed
+      X_traversed = []
+      while abs(x_old - x_new) > epsilon:
+          X_traversed.append(x_new)
+          x_old = x_new
+          x_new = x_old-step_size*f1x.subs({x:x_old}).evalf()
+
+      return x_new, X_traversed
+
+  def frange(start, final, interval):
+
+      numbers = []
+      while start < final:
+          numbers.append(start)
+          start = start + interval
+
+      return numbers
+
+  def create_plot(X_traversed, f, var):
+      # First create the graph of the function itself
+      x_val = frange(-1, 1, 0.01)
+      f_val = [f.subs({var:x}) for x in x_val]
+      plt.plot(x_val, f_val, 'bo')
+      # calculate the function value at each of the intermediate
+      # points traversed
+      f_traversed = [f.subs({var:x}) for x in X_traversed]
+      plt.plot(X_traversed, f_traversed, 'r.')
+      plt.legend(['Function', 'Intermediate points'], loc='best')
+      plt.show()
+
+  if __name__ == '__main__':
+
+      f = input('Enter a function in one variable: ')
+      var = input('Enter the variable to differentiate with respect to: ')
+      var0 = float(input('Enter the initial value of the variable: '))
+      try:
+          f = sympify(f)
+      except SympifyError:
+          print('Invalid function entered')
+      else:
+          var = Symbol(var)
+          d = Derivative(f, var).doit()
+          var_min, X_traversed = grad_descent(var0, d, var)
+          if var_min:
+              print('{0}: {1}'.format(var.name, var_min))
+              print('Minimum value: {0}'.format(f.subs({var:var_min})))
+              create_plot(X_traversed, f, var)
+#+end_src
+
+** Challenge 3 - Area Between Two Curves
+
+We learned tht the integral $\int_{a}^{b} f(x) dx$ expresses the area enclosed by the function $f(x)$, with the $x-axis$ between $x = a$ and $x = b$. The area between two curves is thus expressed as the integral $\int_{a}^{b} (f(x)-g(x)) dx$, where $a$ and $b$ are the points of intersection of the two curves with $a < b$. The function $f(x)$ is referred to as the upper function and $g(x)$ as the lower function. Figure 7-9 illustrates this, assuming $f(x) = x$ and $g(x) = x2$, with $a = 0$ and $b = 1$.
+
+
+Your challenge here is to write a program that will allow the user to input any two single-variable functions of $x$ and print the enclosed area between the two. The program should make it clear that the first function entered should be the upper function, and it should also ask for the values of $x$ between which to find the area.
+
+#+begin_src python
+  from sympy import Integral, Symbol, SympifyError, sympify
+
+  def find_area(f1x, f2x, var, a, b):
+      a = Integral(f1x-f2x, (var, a, b)).doit()
+      return a
+
+  if __name__ == '__main__':
+      f1x = input('Enter the upper function in one variable: ')
+      f2x = input('Enter the lower upper function in one variable: ')
+      var = input('Enter the variable: ')
+      l = float(input('Enter the lower bound of the enclosed region: '))
+      u = float(input('Enter the upper bound of the enclosed region: '))
+
+      try:
+          f1x = sympify(f1x)
+          f2x = sympify(f2x)
+      except SympifyError:
+          print('One of the functions entered is invalid')
+      else:
+          var = Symbol(var)
+          print('Area enclosed by {0} and {1} is: {2} '.format(f1x, f2x, find_area(f1x, f2x, var, l, u)))
+#+end_src
+
+** Challenge 4 - Finding the Length of a Curve
+
+Let’s say you just completed cycling along a road that looks roughly like Figure 7-10. Because you didn’t have an odometer, you want to know whether there’s a mathematical way to determine the distance you cycled. First, we’ll need to find an equation—even an approximation will do— that describes this path.
+
+Notice how it looks very similar to the quadratic functions we’ve discussed in the earlier chapters? In fact, for this challenge, let’s assume that the equation is $y = f(x) = 2x^2 + 3x +1$ and that you cycled from point A (−5, 36) to point B (10, 231). To find the length of this arc—that is, the distance you cycled—we’ll need to calculate the integral $\int_{a}^{b} \sqrt{1 + (\frac{dy}{dx})^2 } dx$, where $y$ describes the preceding function. Your challenge here is to write a program that will calculate the length of the arc, /AB/.
+You may also want to generalize your solution so that it allows you to find the length of the arc between any two points for any arbitrary function, $f(x)$.
+
+#+begin_src python
+  from sympy import Derivative, Integral, Symbol, sqrt, SympifyError, sympify
+
+  def find_length(fx, var, a, b):
+      deriv = Derivative(fx, var).doit()
+      length = Integral(sqrt(1+deriv**2), (var, a, b)).doit().evalf()
+      return length
+
+  if __name__ == '__main__':
+      f = input('Enter a function in one variable: ')
+      var = input('Enter the variable: ')
+      l = float(input('Enter the lower limit of the variable: '))
+      u = float(input('Enter the upper limit of the variable: '))
+
+      try:
+          f = sympify(f)
+      except SympifyError:
+          print('Invalid function entered')
+      else:
+          var = Symbol(var)
+          print('Length of {0} between {1} and {2} is: {3} '.format(f, l, u, find_length(f, var, l, u)))
+#+end_src

@@ -1,0 +1,46 @@
+#+title: Doing Math with Python Solutions
+#+author: Allister Isaiah Harvey
+#+date: 17-11-2023
+#+startup: showeverything
+#+options: toc:3
+#+export: org-org-export-to-org
+#+export_file_name: ../README.org
+
+* Requirements
+
+These are the packages that are required to be installed before running the source code
+
+#+begin_src text :tangle requirements.txt
+matplotlib
+matplotlib_venn
+pyowm
+sympy
+#+end_src
+
+* [[src/chapter 1/solutions.org][Chapter 1]]
+
+#+INCLUDE: "../src/chapter 1/solutions.org" :lines "7-"
+
+* [[src/chapter 2/solutions.org][Chapter 2]]
+
+#+INCLUDE: "../src/chapter 2/solutions.org" :lines "7-"
+
+* [[src/chapter 3/solutions.org][Chapter 3]]
+
+#+INCLUDE: "../src/chapter 3/solutions.org" :lines "7-"
+
+* [[src/chapter 4/solutions.org][Chapter 4]]
+
+#+INCLUDE: "../src/chapter 4/solutions.org" :lines "7-"
+
+* [[src/chapter 5/solutions.org][Chapter 5]]
+
+#+INCLUDE: "../src/chapter 5/solutions.org" :lines "7-"
+
+* [[src/chapter 6/solutions.org][Chapter 6]]
+
+#+INCLUDE: "../src/chapter 6/solutions.org" :lines "7-"
+
+* [[src/chapter 7/solutions.org][Chapter 7]]
+
+#+INCLUDE: "../src/chapter 7/solutions.org" :lines "7-"
