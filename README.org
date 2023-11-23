@@ -15,10 +15,10 @@ pyowm
 sympy
 #+end_src
 
-* [[file:src/chapter 1/solutions.org][Chapter 1]]
+* [[src/chapter 1/solutions.org][Chapter 1]]
 
 #+INCLUDE: "src/chapter 1/solutions.org" :lines "7-"
 
-* [[file:src/chapter 2/solutions.org][Chapter 2]]
+* [[src/chapter 2/solutions.org][Chapter 2]]
 
 #+INCLUDE: "src/chapter 2/solutions.org" :lines "7-"
