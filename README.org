@@ -22,3 +22,23 @@ sympy
 * [[src/chapter 2/solutions.org][Chapter 2]]
 
 #+INCLUDE: "src/chapter 2/solutions.org" :lines "7-"
+
+* [[src/chapter 3/solutions.org][Chapter 3]]
+
+#+INCLUDE: "src/chapter 3/solutions.org" :lines "7-"
+
+* [[src/chapter 4/solutions.org][Chapter 4]]
+
+#+INCLUDE: "src/chapter 4/solutions.org" :lines "7-"
+
+* [[src/chapter 5/solutions.org][Chapter 5]]
+
+#+INCLUDE: "src/chapter 5/solutions.org" :lines "7-"
+
+* [[src/chapter 6/solutions.org][Chapter 6]]
+
+#+INCLUDE: "src/chapter 6/solutions.org" :lines "7-"
+
+* [[src/chapter 7/solutions.org][Chapter 7]]
+
+#+INCLUDE: "src/chapter 7/solutions.org" :lines "7-"
