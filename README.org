@@ -18,7 +18,7 @@ These are the packages that are required to be installed before running the sour
   sympy
 #+end_src
 
-* [[src/chapter 1/solutions.org][Chapter 1]]
+* [[src/chapter_1/solutions.org][Chapter 1]]
 
 ** Challenge 1 - Even-Odd Vending Machine
 
@@ -396,7 +396,7 @@ Try rewriting some of the other programs in this chapter so that they continue e
               break
 #+end_src
 
-* [[src/chapter 2/solutions.org][Chapter 2]]
+* [[src/chapter_2/solutions.org][Chapter 2]]
 
 ** Challenge 1 - How Does the Temperature Vary During the Day?
 
@@ -711,7 +711,7 @@ You may find the following function, which returns a list of the first n Fibonac
       plot_ratio(series)
 #+end_src
 
-* [[src/chapter 3/solutions.org][Chapter 3]]
+* [[src/chapter_3/solutions.org][Chapter 3]]
 
 ** Challenge 1 - Better Correlation Coefficient–Finding Program
 
@@ -1018,7 +1018,7 @@ Your challenge is to write a program to read a list of numbers from a file and t
           print('{0:.2f} - {1:.2f} \t {2}'.format(c[0], c[1], cnt))
 #+end_src
 
-* [[src/chapter 4/solutions.org][Chapter 4]]
+* [[src/chapter_4/solutions.org][Chapter 4]]
 
 ** Challenge 1 - Factor Finder
 
@@ -1273,7 +1273,7 @@ When you run your program, it should ask the user to input an inequality express
               print('Invalid inequality')
 #+end_src
 
-* [[src/chapter 5/solutions.org][Chapter 5]]
+* [[src/chapter_5/solutions.org][Chapter 5]]
 
 ** Challenge 1 - Using Venn Diagrams to Visualize Relationships Between Sets
 
@@ -1572,7 +1572,7 @@ Consider Figure 5-6 once again. The area of the square is $4r^2$, and the area o
           print('Area: {0}, Estimated ({1}): {2}'.format(area_of_circle, points, estimate(radius, points)))
 #+end_src
 
-* [[src/chapter 6/solutions.org][Chapter 6]]
+* [[src/chapter_6/solutions.org][Chapter 6]]
 
 ** Challenge 1 - Packing Circles into a Square
 
@@ -1923,7 +1923,7 @@ This algorithm is usually referred to as the ~escape-time algorithm~. When the m
       plt.show()
 #+end_src
 
-* [[src/chapter 7/solutions.org][Chapter 7]]
+* [[src/chapter_7/solutions.org][Chapter 7]]
 
 ** Challenge 1 - Verify the Continuity of a Function at a Point
 
